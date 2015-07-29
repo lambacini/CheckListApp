@@ -8,3 +8,4 @@ tmp
 libs/
 app/libs
 app/bower_components
+dist
