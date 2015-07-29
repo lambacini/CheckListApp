@@ -1,0 +1,93 @@
+<div layout="row" flex>
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+        <md-toolbar class="md-default-theme md-whiteframe-glow-z2">
+            <div class="md-toolbar-tools">
+                <h2>
+                    <span>CheckApp</span>
+                </h2>
+                <span flex></span>
+                <md-button class="md-icon-button" aria-label="More" ng-click="vc.addNew()">
+                    <md-icon md-svg-icon="add2"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-content flex layout-padding>
+            <md-list>
+                <md-list-item ng-repeat="item in vc.Items" ng-click="vc.selectItem(item)">
+                    <p>{{ item.title }}</p>
+                </md-list-item>
+            </md-list>
+        </md-content>
+    </md-sidenav>
+    <md-toolbar class="md-theme-indigo">
+        <div class="md-toolbar-tools" tabindex="0">
+            <div layout="row" flex class="fill-height">
+                <div class="md-toolbar-item md-breadcrumb">
+                    <span class="md-breadcrumb-page ng-binding">Detay</span>
+                </div>
+                <span flex></span>
+            </div>
+
+            <md-menu>
+                <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="$mdOpenMenu()">
+                    <md-icon md-menu-origin md-svg-icon="settings"></md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.redial($event)">
+                            <md-icon md-svg-icon="settings" md-menu-align-target></md-icon>
+                            Ayarlar
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.toggleNotifications()">
+                            <md-icon md-svg-icon="ping"></md-icon>
+                            Bildirimleri Aç
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-divider></md-menu-divider>
+                    <md-menu-item>
+                        <md-button ng-click="ctrl.toggleNotifications()">
+                            <md-icon md-svg-icon="logout"></md-icon>
+                            Oturumu Kapat
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+            <md-button class="md-icon-button md-primary docs-menu-icon" aria-label="Toggle Menu" ng-click="vc.openSideBar()">
+                <md-icon style="color:white" md-svg-icon="menu" class="ng-isolate-scope md-default-theme"
+                         aria-hidden="true">
+                </md-icon>
+            </md-button>
+        </div>
+        <md-content flex layout-padding>
+            <div layout="column" layout-fill layout-align="top center">
+                <md-subheader  class="md-primary">{{vc.Selectedlist.title}}</md-subheader>
+                <md-list>
+                    <md-list-item ng-repeat="item in vc.Selectedlist.items">
+                        <md-checkbox ng-change="vc.toggle(item)" class="md-primary" ng-model="item.isChecked"></md-checkbox>
+                        <p ng-class="[{'strike':item.isChecked}]">{{ item.title }}</p>
+                        <md-icon class="md-secondary" style="color:slategray;"  aria-label="Chat" md-svg-icon="comment" ng-click="vc.showComment(item)"></md-icon>
+                        <md-tooltip ng-show="item.isChecked ">
+                            {{item.checkDate | date:'dd.MM.yyyy HH:mm:ss'}}
+                        </md-tooltip>
+                    </md-list-item>
+                </md-list>
+            </div>
+            <div flex></div>
+        </md-content>
+    </md-toolbar>
+</div>
+
+<div style="position:absolute;right:0;bottom:0;" md-open="false" md-direction="left"
+     ng-class="md-fling">
+    <md-button aria-label="facebook" class="md-fab md-primary md-mini">
+        <md-icon md-svg-icon="add2"></md-icon>
+    </md-button>
+    <md-button aria-label="facebook" class="md-fab md-warn md-mini">
+        <md-icon md-svg-icon="delete"></md-icon>
+    </md-button>
+    <md-button aria-label="facebook" class="md-fab md-primary md-mini">
+        <md-icon md-svg-icon="share"></md-icon>
+    </md-button>
+</div>
