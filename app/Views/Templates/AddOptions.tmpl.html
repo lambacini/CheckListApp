@@ -1,0 +1,32 @@
+<md-dialog aria-label="Mango (Fruit)" style="width:100%;">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>
+                <span>{{ vc.Item.title}}</span>
+            </h2>
+            <span flex></span>
+            <md-button class="md-icon-button" aria-label="More" ng-click="vc.addNew()">
+                <md-icon md-svg-icon="add2"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <md-list>
+            <md-list-item ng-repeat="item in vc.Item.items">
+                <md-input-container md-no-float flex>
+                    <input ng-model="item.title" placeholder="Başlık">
+                </md-input-container>
+                <md-icon class="md-secondary" style="color:red;"  aria-label="Chat" md-svg-icon="delete" ng-click="vc.remove(item)"></md-icon>
+            </md-list-item>
+        </md-list>
+    </md-dialog-content>
+    <div class="md-actions" layout="row">
+        <span flex></span>
+        <md-button ng-click="vc.save()" class="md-primary">
+            Kaydet
+        </md-button>
+        <md-button ng-click="vc.cancel()" class="md-primary">
+            Vazgeç
+        </md-button>
+    </div>
+</md-dialog>

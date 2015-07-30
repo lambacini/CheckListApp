@@ -21,6 +21,10 @@ module.exports = function(grunt) {
             ctrlJs:{
                 src: './app/js/Controllers/*.js',
                 dest: './dist/js/controllers.js'
+            },
+            serviceJs:{
+                src: './app/js/Services/*.js',
+                dest: './dist/js/Services.js'
             }
         },
         cssmin: {

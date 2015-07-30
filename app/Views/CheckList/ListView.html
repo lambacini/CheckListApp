@@ -62,9 +62,18 @@
         </div>
         <md-content flex layout-padding>
             <div layout="column" layout-fill layout-align="top center">
-                <md-subheader  class="md-primary">{{vc.Selectedlist.title}}</md-subheader>
+                <div flex layout="row">
+                    <div flex>
+                        <md-subheader  class="md-primary">{{vc.Selectedlist.title}} - <span style="color:red">{{ vc.getCheckedCount() }} / {{ vc.Selectedlist.items.length}}</span></md-subheader>
+                    </div>
+                    <div flex="20">
+                        <md-switch ng-model="vc.OnlyChecked" aria-label="Switch 1" ng-change="vc.ChangeList()">
+                            {{ vc.ListType}}
+                        </md-switch>
+                    </div>
+                </div>
                 <md-list>
-                    <md-list-item ng-repeat="item in vc.Selectedlist.items">
+                    <md-list-item ng-show="vc.isVisible(item)" ng-repeat="item in vc.Selectedlist.items">
                         <md-checkbox ng-change="vc.toggle(item)" class="md-primary" ng-model="item.isChecked"></md-checkbox>
                         <p ng-class="[{'strike':item.isChecked}]">{{ item.title }}</p>
                         <md-icon class="md-secondary" style="color:slategray;"  aria-label="Chat" md-svg-icon="comment" ng-click="vc.showComment(item)"></md-icon>
@@ -81,7 +90,7 @@
 
 <div style="position:absolute;right:0;bottom:0;" md-open="false" md-direction="left"
      ng-class="md-fling">
-    <md-button aria-label="facebook" class="md-fab md-primary md-mini">
+    <md-button aria-label="facebook" class="md-fab md-primary md-mini" ng-click="vc.addOptions()">
         <md-icon md-svg-icon="add2"></md-icon>
     </md-button>
     <md-button aria-label="facebook" class="md-fab md-warn md-mini">

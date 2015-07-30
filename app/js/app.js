@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('app', ['ui.router', 'ngMaterial', 'ngResource', 'hSweetAlert', 'ngSanitize', 'commangular'])
+    angular.module('app', ['ui.router', 'ngMaterial', 'ngResource', 'hSweetAlert', 'ngSanitize', 'commangular','hSweetAlert'])
         .constant('appParams', appParams())
         .config(['$mdIconProvider', iconConfig])
         .config(['$stateProvider', '$urlRouterProvider', appConfig]);

@@ -3,10 +3,10 @@
  */
 (function(){
     angular.module('app')
-        .controller('ListCtrl',['$mdDialog','$mdSidenav',listCtrl]);
+        .controller('ListCtrl',['$mdDialog','$mdSidenav','$filter',listCtrl]);
 
 
-    function listCtrl($mdDialog,$mdSidenav){
+    function listCtrl($mdDialog,$mdSidenav,$filter){
         var self = this;
 
         self.Items  =[
@@ -14,6 +14,8 @@
                 title:"Yapılacaklar 29.07.2015",
                 cdate:'29.07.2015 08:15:14',
                 stepByStep:false,
+                group:"Default",
+                allowEdit:false,
                 owner:1,
                 items:[
                     {
@@ -50,6 +52,8 @@
                 title:"Diğer Bir Hastane Kurulum Yapılacaklar",
                 cdate:'29.07.2015 08:15:14',
                 stepByStep:false,
+                group:"Default",
+                allowEdit:false,
                 owner:1,
                 items:[
                     {
@@ -88,8 +92,16 @@
         self.selectItem = selectItem;
         self.showComment = showComment;
         self.addNew = addNew;
+        self.addOptions = addOptions;
         self.openSideBar = openSideBar;
         self.openMenu = openMenu;
+        self.OnlyChecked = false;
+        self.ListType = "Tümü";
+        self.ChangeList = ChangeList;
+        self.TempItem = self.Items[0];
+        self.isVisible = isVisible;
+        self.getCheckedCount =getCheckedCount;
+
 
         return self;
 
@@ -129,9 +141,30 @@
 
         }
 
+        function addOptions(ev){
+            $mdDialog.show({
+                controller: "AddOptionsCtrl",
+                controllerAs:'vc',
+                resolve: {
+                    item:function() {
+                        return self.Selectedlist;
+                    }
+                },
+                templateUrl: 'views/templates/AddOptions.tmpl.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+            });
+        };
+
         function addNew(ev){
             $mdDialog.show({
                 controller: "EditListCtrl",
+                controllerAs:'vc',
+                resolve: {
+                    Items:function() {
+                        return self.Items;
+                    }
+                },
                 templateUrl: 'views/templates/EditList.tmpl.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
@@ -144,6 +177,37 @@
 
         function openMenu(){
             $mdSidenav('left').open();
+        }
+
+        function ChangeList(){
+            if(self.OnlyChecked)
+            {
+                self.ListType = "Bekleyenler";
+                self.tempItem = angular.copy(self.Selectedlist);
+            }
+            else{
+                self.ListType = "Tümü";
+                self.Selectedlist = self.tempItem;
+            }
+        }
+
+        function isVisible(item){
+            if(self.OnlyChecked && item.isChecked)
+                return false;
+            else if(!self.OnlyChecked)
+            {
+                return true;
+            }
+            else
+                return true;
+        }
+
+        function getCheckedCount(){
+            var tool = $filter('filter')( self.Selectedlist.items, {
+                isChecked: true
+            });
+
+            return tool.length;
         }
     };
 })();
