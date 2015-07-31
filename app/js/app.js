@@ -1,14 +1,16 @@
 (function () {
     'use strict';
 
-    angular.module('app', ['ui.router', 'ngMaterial', 'ngResource', 'hSweetAlert', 'ngSanitize', 'commangular','hSweetAlert'])
+    angular.module('app', ['ui.router', 'angular-jwt','fonet-storage','ngMaterial', 'ngResource', 'hSweetAlert', 'ngSanitize', 'commangular','hSweetAlert'])
         .constant('appParams', appParams())
         .config(['$mdIconProvider', iconConfig])
-        .config(['$stateProvider', '$urlRouterProvider', appConfig]);
+        .config(['$stateProvider', '$urlRouterProvider', appConfig])
+        .run(['$state','$rootScope','AuthService',appRun]);
 
 
     function appParams() {
         return {
+            WebApi:'http://'+window.location.hostname+'/CheckApi/',
             clientId: 'ChecklistApp',
             AppName: "ChecklistApp",
             AppVersion: "0.1.0",
@@ -17,9 +19,16 @@
     };
 
     function appConfig($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise('app/list');
+        $urlRouterProvider.otherwise('/login');
 
         $stateProvider
+            .state('login',{
+                url:'/login',
+                templateUrl:'views/login/login.html',
+                controller:'LoginCtrl',
+                controllerAs:'lc',
+                authentication:false
+            })
             .state('app', {
                 url: '/app',
                 templateUrl: 'views/masterView.html',
@@ -71,4 +80,23 @@
             .icon('logout','images/ic_exit_to_app_24px.svg')
             .icon('share','images/ic_share_24px.svg')
     };
+
+    function appRun($state,$rootScope,AuthService){
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+            console.log('State Changed');
+            console.log(toState);
+            /*Route için Authentication Gerekli ise*/
+            if (toState.authentication && toState.url != "/list") {
+                /*Kullanýcý Login Olmam?? ise */
+                AuthService.isLoginRequired()
+                    .then(function(result) {
+                        console.log('stateChangeStart : ' + result);
+                        if (result) {
+                            $state.transitionTo('login');
+                            event.preventDefault();
+                        }
+                    });
+            }
+        });
+    }
 })();

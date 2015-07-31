@@ -3,91 +3,20 @@
  */
 (function(){
     angular.module('app')
-        .controller('ListCtrl',['$mdDialog','$mdSidenav','$filter',listCtrl]);
+        .controller('ListCtrl',['$mdDialog','$mdSidenav','$filter','CheckLists','notify','$timeout',listCtrl]);
 
 
-    function listCtrl($mdDialog,$mdSidenav,$filter){
+    function listCtrl($mdDialog,$mdSidenav,$filter,CheckLists,notify,$timeout){
         var self = this;
 
-        self.Items  =[
+        self.loadCheckList = loadCheckList;
+        self.Items = CheckLists.query(function(){
+            if(self.Items && self.Items.length > 0)
             {
-                title:"Yapılacaklar 29.07.2015",
-                cdate:'29.07.2015 08:15:14',
-                stepByStep:false,
-                group:"Default",
-                allowEdit:false,
-                owner:1,
-                items:[
-                    {
-                        index:1,
-                        isChecked:true,
-                        title:'Adana Devlet Aktarım',
-                        comments:'Adana Devlet FONETHBYS kullanıcsını aktar',
-                        checkDate:Date.now()
-                    },
-                    {
-                        index:2,
-                        isChecked:false,
-                        title:'Adana Devlet Raporları Teslim Et',
-                        comments:'Açklama yok',
-                        checkDate:""
-                    },
-                    {
-                        index:3,
-                        isChecked:false,
-                        title:'Adana Devlet Flash ile kargo yapsınlar',
-                        comments:'A??klama yok',
-                        checkDate:""
-                    },
-                    {
-                        index:3,
-                        isChecked:false,
-                        title:'Samsun Gazi Pacs Aktarımı',
-                        comments:'A??klama yok',
-                        checkDate:""
-                    }
-                ]
-            },
-            {
-                title:"Diğer Bir Hastane Kurulum Yapılacaklar",
-                cdate:'29.07.2015 08:15:14',
-                stepByStep:false,
-                group:"Default",
-                allowEdit:false,
-                owner:1,
-                items:[
-                    {
-                        index:1,
-                        isChecked:true,
-                        title:'Veritabanı Kur',
-                        comments:'Açıklama yok',
-                        checkDate:Date.now()
-                    },
-                    {
-                        index:2,
-                        isChecked:false,
-                        title:'Dosyaları Kopyala',
-                        comments:'Açıklama yok',
-                        checkDate:""
-                    },
-                    {
-                        index:3,
-                        isChecked:false,
-                        title:'Conf Oluştur',
-                        comments:'Açıklama yok',
-                        checkDate:""
-                    },
-                    {
-                        index:3,
-                        isChecked:false,
-                        title:'Servis Oluştur',
-                        comments:'Açıklama yok',
-                        checkDate:""
-                    }
-                ]
+                self.Selectedlist = self.Items[self.Items.length-1];
             }
-        ];
-        self.Selectedlist = self.Items[0];
+        });
+        self.Selectedlist = {};
         self.toggle = toggle;
         self.selectItem = selectItem;
         self.showComment = showComment;
@@ -102,14 +31,27 @@
         self.isVisible = isVisible;
         self.getCheckedCount =getCheckedCount;
 
-
         return self;
 
+        function loadCheckList(){
+            notify.showLoading();
+            CheckLists.query(function(data){
+                self.Items = data;
+                if(self.Items && self.Items.length > 0)
+                {
+                    self.Selectedlist = self.Items[self.Items.length-1];
+                }
+                $timeout(function(){
+                    notify.hideLoading();
+                });
+            });
+        }
+
         function toggle(item){
-            self.Selectedlist.items.forEach(function(listItem,key){
-               if(item.index == listItem.index)
+            self.Selectedlist.Options.forEach(function(listItem,key){
+               if(item.Id == listItem.Id)
                {
-                   if(item.isChecked)
+                   if(item.IsChecked)
                    {
                        item.checkDate = Date.now();
                    }
@@ -117,12 +59,19 @@
                    {
                        item.checkDate = "";
                    }
+
+                   notify.showLoading();
+                   CheckLists.update({id:self.Selectedlist.Id},self.Selectedlist,function(data){
+                       $timeout(function(){
+                           notify.hideLoading();
+                       });
+                   });
                }
             });
-
         };
 
         function selectItem(item){
+            console.log(item);
             self.Selectedlist = item;
         };
 
@@ -153,6 +102,13 @@
                 templateUrl: 'views/templates/AddOptions.tmpl.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
+            }).then(function(test){
+                notify.showLoading();
+                CheckLists.update({id:self.Selectedlist.Id},self.Selectedlist,function(data){
+                    $timeout(function(){
+                        notify.hideLoading();
+                    });
+                });
             });
         };
 
@@ -168,6 +124,10 @@
                 templateUrl: 'views/templates/EditList.tmpl.html',
                 parent: angular.element(document.body),
                 targetEvent: ev,
+            }).then(function(){
+                self.loadCheckList();
+            },function(){
+
             });
         };
 
@@ -183,16 +143,16 @@
             if(self.OnlyChecked)
             {
                 self.ListType = "Bekleyenler";
-                self.tempItem = angular.copy(self.Selectedlist);
+
             }
             else{
                 self.ListType = "Tümü";
-                self.Selectedlist = self.tempItem;
+
             }
         }
 
         function isVisible(item){
-            if(self.OnlyChecked && item.isChecked)
+            if(self.OnlyChecked && item.IsChecked)
                 return false;
             else if(!self.OnlyChecked)
             {
@@ -203,11 +163,23 @@
         }
 
         function getCheckedCount(){
-            var tool = $filter('filter')( self.Selectedlist.items, {
-                isChecked: true
-            });
-
-            return tool.length;
+            if(self.Selectedlist) {
+                var tool = $filter('filter')(self.Selectedlist.Options, {
+                    IsChecked: true
+                });
+                if(tool)
+                {
+                    return tool.length;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return 0;
+            }
         }
     };
 })();

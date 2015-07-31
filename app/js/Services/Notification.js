@@ -5,9 +5,9 @@
     'use strict';
 
     angular.module('app')
-        .service('notify', ['$q','$mdDialog', 'sweet', Notify]);
+        .service('notify', ['$q','$mdDialog', 'sweet','$mdToast', Notify]);
 
-    function Notify($q,$mdDialog, sweet) {
+    function Notify($q,$mdDialog, sweet,$mdToast) {
         var self = this;
         self.showError = showError;
         self.showWarning = showWarning;
@@ -64,7 +64,7 @@
 
             $mdDialog.show({
                 parent: parentEl,
-                templateUrl: 'views/templates/loading-tmpl.html',
+                templateUrl: 'views/templates/loading.tmpl.html',
                 disableParentScroll: true,
                 hasBackdrop: true,
                 clickOutsideToClose: false,
@@ -77,7 +77,12 @@
         }
 
         function toast(message) {
-
+            $mdToast.show(
+                $mdToast.simple()
+                    .content(message)
+                    .position('top right')
+                    .hideDelay(2000)
+            );
         }
     };
 })();

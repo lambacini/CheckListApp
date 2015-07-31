@@ -1,0 +1,41 @@
+<md-content id="loginPanel" flex layout="column" layout-align="center center">
+    <md-card class="loginCard md-whiteframe-z4" layout-align="center center" layout="column" style="position:absolute;left:0;top:0;bottom:0;right:0;">
+        <md-card-content>
+            <form name="loginForm" class="loginCard" novalidate ng-submit="login()">
+                <div layout="row" flex layout-align="center center">
+                    <img ng-src="images/logo4.png" height="80" />
+                </div>
+                <div layout="row" flex layout-align="center center">
+                    <md-input-container>
+                        <p class="center login-form-text" style="text-align:center;padding-top:15px;">CheckApp</p>
+                    </md-input-container>
+                </div>
+                <div layout="row" flex>
+                    <md-input-container md-no-float>
+                        <md-icon md-svg-icon="user2" style="display:inline-block;"></md-icon>
+                        <input ng-model="loginData.UserName" type="text" placeholder="Kullanıcı Adı" ng-disabled="formState">
+                    </md-input-container>
+                </div>
+                <div layout="row" flex>
+                    <md-input-container md-no-float>
+                        <md-icon md-svg-icon="password" style="display:inline-block;"></md-icon>
+                        <input ng-model="loginData.Password" type="password" placeholder="Şifre" ng-disabled="formState">
+                    </md-input-container>
+                </div>
+                <div layout="row" flex>
+                    <md-checkbox aria-label="Oturum Açık Kalsın" class="md-primary" ng-disabled="formState">
+                        Oturum Açık Kalsın
+                    </md-checkbox>
+                </div>
+                <div layout="row" flex>
+                    <md-button style="width:100%;" type="submit" ng-disabled="loginForm.user.$invalid || loginForm.password.$invalid" class="md-raised md-primary"> Giriş</md-button>
+                </div>
+                <div layout="row" flex layout-align="center center">
+                    <md-input-container style="text-align:center;">
+                        <p style="font-size:12px; padding-top:15px;color:gray;">Copyright © 2015 Rubik Yazılım  </p>
+                    </md-input-container>
+                </div>
+            </form>
+        </md-card-content>
+    </md-card>
+</md-content>

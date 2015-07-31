@@ -3,28 +3,24 @@
  */
 (function(){
     angular.module('app')
-        .controller('EditListCtrl',['Items','$mdDialog','notify',editListCtrl]);
+        .controller('EditListCtrl',['Items','$mdDialog','notify','CheckLists',editListCtrl]);
 
-    function editListCtrl(Items,$mdDialog,notify){
+    function editListCtrl(Items,$mdDialog,notify,CheckLists){
         var self = this;
-        self.Items = Items;
-        self.NewItem = {
-            title:"",
-            cdate:'',
-            stepByStep:false,
-            group:"Default",
-            allowEdit:false,
-            owner:1,
-            items:[ ]
-        };
+        self.NewItem = new CheckLists();
+
         self.save = save;
         self.cancel = cancel;
 
         return self;
 
         function save(){
-            self.Items.push(self.NewItem);
-            $mdDialog.cancel();
+            self.NewItem.group = 0;
+            self.NewItem.CTime = Date.now();
+
+            self.NewItem.$save(function(){
+                $mdDialog.hide(true);
+            });
         }
 
         function cancel(){
@@ -50,9 +46,9 @@
  */
 (function(){
     angular.module('app')
-        .controller('AddOptionsCtrl',['item','$mdDialog','notify',addOptionsCtrl]);
+        .controller('AddOptionsCtrl',['item','$mdDialog','notify','CheckLists',addOptionsCtrl]);
 
-    function addOptionsCtrl(item,$mdDialog,notify){
+    function addOptionsCtrl(item,$mdDialog,notify,CheckLists){
         var self = this;
         self.Item = item;
         self.TempItem = angular.copy(item);
@@ -66,8 +62,7 @@
 
 
         function addNew(){
-            self.Item.items.push({
-                index:self.Item.items.length+1,
+            self.Item.Options.push({
                 isChecked:false,
                 title:'',
                 comments:'',
@@ -78,14 +73,14 @@
         }
 
         function remove(item,ev){
-            self.Item.items.forEach(function(oldItem,key){
-               if(item.index == oldItem.index)
+            self.Item.Options.forEach(function(oldItem,key){
+               if(item.Id == oldItem.Id )
                {
                    notify.confirm('Sil','Seçili opsiyon silinecek devam edilsinmi ?').then(function(isConfirm){
                       if(isConfirm)
                       {
-                          var index = self.Item.items.indexOf(item);
-                          self.Item.items.splice(index,1);
+                          var index = self.Item.Options.indexOf(item);
+                          self.Item.Options.splice(index,1);
                           self.isChanged = true;
                       }
                    });
@@ -94,7 +89,7 @@
         };
 
         function save(){
-            $mdDialog.cancel();
+           $mdDialog.hide(true);
         }
 
         function cancel(){
@@ -103,7 +98,7 @@
                 notify.confirm('Vazgeç','Yaptığınız Değişiklikler Kaybolacak. Devam Edilsinmi ?').then(function(isConfirm){
                     if(isConfirm)
                     {
-                        self.Item.items = self.TempItem.items;
+                        self.Item.Options = self.TempItem.Options;
                         $mdDialog.cancel();
                     }
                 });

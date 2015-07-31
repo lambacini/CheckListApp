@@ -1,6 +1,5 @@
 html,
 body {
-  background-color: black !important;
   overflow:hidden !important;
   width: 100%;
   height: 100%;
@@ -19,4 +18,14 @@ body {
 .strike {
     text-decoration: line-through;
     color:gray;
+}
+
+md-backdrop.md-opaque {
+    background-color: white;
+}
+
+
+.loading2{
+    color:black;
+    font-weight: 300;
 }

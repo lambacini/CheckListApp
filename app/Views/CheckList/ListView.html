@@ -14,7 +14,7 @@
         <md-content flex layout-padding>
             <md-list>
                 <md-list-item ng-repeat="item in vc.Items" ng-click="vc.selectItem(item)">
-                    <p>{{ item.title }}</p>
+                    <p>{{ item.Title }}</p>
                 </md-list-item>
             </md-list>
         </md-content>
@@ -64,7 +64,7 @@
             <div layout="column" layout-fill layout-align="top center">
                 <div flex layout="row">
                     <div flex>
-                        <md-subheader  class="md-primary">{{vc.Selectedlist.title}} - <span style="color:red">{{ vc.getCheckedCount() }} / {{ vc.Selectedlist.items.length}}</span></md-subheader>
+                        <md-subheader  class="md-primary">{{vc.Selectedlist.Title}} - <span style="color:red">{{ vc.getCheckedCount() }} / {{ vc.Selectedlist.Options.length}}</span></md-subheader>
                     </div>
                     <div flex="20">
                         <md-switch ng-model="vc.OnlyChecked" aria-label="Switch 1" ng-change="vc.ChangeList()">
@@ -73,13 +73,13 @@
                     </div>
                 </div>
                 <md-list>
-                    <md-list-item ng-show="vc.isVisible(item)" ng-repeat="item in vc.Selectedlist.items">
-                        <md-checkbox ng-change="vc.toggle(item)" class="md-primary" ng-model="item.isChecked"></md-checkbox>
-                        <p ng-class="[{'strike':item.isChecked}]">{{ item.title }}</p>
+                    <md-list-item ng-show="vc.isVisible(item)" ng-repeat="item in vc.Selectedlist.Options">
+                        <md-checkbox ng-change="vc.toggle(item)" class="md-primary" ng-model="item.IsChecked" ng-true-value="1" ng-false-value="0"></md-checkbox>
+                        <p ng-class="[{'strike':item.IsChecked}]">{{ item.Title }}</p>
                         <md-icon class="md-secondary" style="color:slategray;"  aria-label="Chat" md-svg-icon="comment" ng-click="vc.showComment(item)"></md-icon>
-                        <md-tooltip ng-show="item.isChecked ">
-                            {{item.checkDate | date:'dd.MM.yyyy HH:mm:ss'}}
-                        </md-tooltip>
+                        <!--<md-tooltip ng-show="item.IsChecked ">
+                            {{item.CheckedDate | date:'dd.MM.yyyy HH:mm:ss'}}
+                        </md-tooltip> -->
                     </md-list-item>
                 </md-list>
             </div>
@@ -92,9 +92,6 @@
      ng-class="md-fling">
     <md-button aria-label="facebook" class="md-fab md-primary md-mini" ng-click="vc.addOptions()">
         <md-icon md-svg-icon="add2"></md-icon>
-    </md-button>
-    <md-button aria-label="facebook" class="md-fab md-warn md-mini">
-        <md-icon md-svg-icon="delete"></md-icon>
     </md-button>
     <md-button aria-label="facebook" class="md-fab md-primary md-mini">
         <md-icon md-svg-icon="share"></md-icon>

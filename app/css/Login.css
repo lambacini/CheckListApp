@@ -1,0 +1,92 @@
+
+#loginPanel {
+    /*background: none repeat scroll 0% 0% rgb(238, 238, 238) !important;*/
+
+    background-color: #2881B2 !important;
+    min-width: 350px;
+}
+
+
+.loginCard {
+    padding-left:10px;
+    padding-right:10px;
+    padding-top:30px;
+
+    margin:0px;
+}
+
+.loginCard {
+    color:gray !important;
+}
+
+.loginCard md-input-container,
+.loginCard md-icon,
+.loginCard md-checkbox
+{
+    color:black !important;
+}
+
+.loginCard md-input-container
+{
+    width:100%;
+}
+
+
+.inputWrapper {
+    margin: 2px;
+    width: 100%;
+}
+
+.inputWrapper input {
+    border: 1px solid #c9d7e0;
+    width: 100%;
+    background: #fff;
+    height: 35px;
+    padding: 10px;
+}
+
+.inputWrapper .md-button {
+    width: 100%;
+    color: white;
+    height: 40px;
+    border: 1px solid #1d212f !important;
+;
+}
+
+.inputWrapper .md-label {
+    font-size: 12px;
+}
+
+.inputWrapper img {
+    width: 220px;
+}
+
+.inputWrapper .logo {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.inputWrapper .md-checkbox {
+    width: 220px;
+    margin-left: 0px !important;
+}
+
+.loginfooter {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-family: arial, sans-serif !important;
+    padding: 5px 0;
+}
+
+.loginPanel {}
+
+.loginPanel {
+    min-width: 250px;
+    max-width: 300px;
+}

@@ -27,6 +27,7 @@
     "sweetalert": "~1.0.1",
     "angular-h-sweetalert": "~1.4.3",
     "commangular": "~0.9.0",
-    "angular-sanitize": "~1.4.0"
+    "angular-sanitize": "~1.4.0",
+    "angular-jwt": "~0.0.9"
   }
 }
