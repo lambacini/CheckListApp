@@ -34,6 +34,9 @@
         <md-button ng-click="vc.save()" class="md-primary">
             Kaydet
         </md-button>
+        <md-button ng-if="vc.IsEdit" ng-click="vc.remove()" class="md-warn">
+            Sil
+        </md-button>
         <md-button ng-click="vc.cancel()" class="md-primary">
             Vazgeç
         </md-button>

@@ -22,6 +22,7 @@
         self.selectItem = selectItem;
         self.showComment = showComment;
         self.addNew = addNew;
+        self.editList = editList;
         self.addOptions = addOptions;
         self.openSideBar = openSideBar;
         self.openMenu = openMenu;
@@ -131,14 +132,35 @@
                 controller: "EditListCtrl",
                 controllerAs: 'vc',
                 resolve: {
-                    Items: function() {
-                        return self.Items;
+                    Item: function() {
+                        return new CheckLists();
                     }
                 },
                 templateUrl: 'views/templates/EditList.tmpl.html',
                 parent: angular.element(document.body),
                 clickOutsideToClose:false,
-                escapeToClose:false,
+                escapeToClose:true,
+                targetEvent: ev,
+            }).then(function() {
+                self.loadCheckList();
+            }, function() {
+
+            });
+        };
+
+        function editList(ev) {
+            $mdDialog.show({
+                controller: "EditListCtrl",
+                controllerAs: 'vc',
+                resolve: {
+                    Item: function() {
+                        return self.Selectedlist;
+                    }
+                },
+                templateUrl: 'views/templates/EditList.tmpl.html',
+                parent: angular.element(document.body),
+                clickOutsideToClose:false,
+                escapeToClose:true,
                 targetEvent: ev,
             }).then(function() {
                 self.loadCheckList();

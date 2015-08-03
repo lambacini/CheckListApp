@@ -25,3 +25,8 @@ body {
     color:black;
     font-weight: 300;
 }
+
+.listItem{
+    font-size: 16px!important;
+    font-weight: 300!important;
+}
