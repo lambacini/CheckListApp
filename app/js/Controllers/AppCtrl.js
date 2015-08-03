@@ -7,6 +7,8 @@
         .controller('AppCtrl',[appCtrl]);
 
     function appCtrl(){
-
+    	var self = this;
+    	
+    	return self;
     };
 })();

@@ -12,11 +12,16 @@
             </div>
         </md-toolbar>
         <md-content flex layout-padding>
-            <md-list>
-                <md-list-item ng-repeat="item in vc.Items" ng-click="vc.selectItem(item)">
-                    <p>{{ item.Title }}</p>
-                </md-list-item>
-            </md-list>
+            <ul class="docs-menu">
+                <li class="parent-list-item" data-ng-repeat="item in vc.Items">
+                    <a class="md-button md-default-theme" ng-click="vc.selectItem(item)" tabindex="0" >
+                        <md-icon class="md-secondary" style="color:slategray;" aria-label="Chat" md-svg-icon="edit" ng-click="vc.addNew()"></md-icon>
+                        <span class="ng-binding ng-scope">
+                            {{item.Title}}
+                        </span>
+                    </a>
+                </li>
+            </ul>
         </md-content>
     </md-sidenav>
     <md-toolbar class="md-theme-indigo">
@@ -27,7 +32,6 @@
                 </div>
                 <span flex></span>
             </div>
-
             <md-menu>
                 <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="$mdOpenMenu()">
                     <md-icon md-menu-origin md-svg-icon="settings"></md-icon>
@@ -55,8 +59,7 @@
                 </md-menu-content>
             </md-menu>
             <md-button class="md-icon-button md-primary docs-menu-icon" aria-label="Toggle Menu" ng-click="vc.openSideBar()">
-                <md-icon style="color:white" md-svg-icon="menu" class="ng-isolate-scope md-default-theme"
-                         aria-hidden="true">
+                <md-icon style="color:white" md-svg-icon="menu" class="ng-isolate-scope md-default-theme" aria-hidden="true">
                 </md-icon>
             </md-button>
         </div>
@@ -64,7 +67,7 @@
             <div layout="column" layout-fill layout-align="top center">
                 <div flex layout="row">
                     <div flex>
-                        <md-subheader  class="md-primary">{{vc.Selectedlist.Title}} - <span style="color:red">{{ vc.getCheckedCount() }} / {{ vc.Selectedlist.Options.length}}</span></md-subheader>
+                        <md-subheader class="md-primary">{{vc.Selectedlist.Title}} - <span style="color:red">{{ vc.getCheckedCount() }} / {{ vc.Selectedlist.Options.length}}</span></md-subheader>
                     </div>
                     <div flex="20">
                         <md-switch ng-model="vc.OnlyChecked" aria-label="Switch 1" ng-change="vc.ChangeList()">
@@ -74,9 +77,10 @@
                 </div>
                 <md-list>
                     <md-list-item ng-show="vc.isVisible(item)" ng-repeat="item in vc.Selectedlist.Options">
-                        <md-checkbox ng-change="vc.toggle(item)" class="md-primary" ng-model="item.IsChecked" ng-true-value="1" ng-false-value="0"></md-checkbox>
+                        <div ng-show="item.isBusy" style="margin-right:10px;"><img src="images/loading.gif"></div>
+                        <md-checkbox ng-show="!item.isBusy" ng-change="vc.toggle(item)" class="md-primary" ng-model="item.IsChecked" ng-true-value="1" ng-false-value="0"></md-checkbox>
                         <p ng-class="[{'strike':item.IsChecked}]">{{ item.Title }}</p>
-                        <md-icon class="md-secondary" style="color:slategray;"  aria-label="Chat" md-svg-icon="comment" ng-click="vc.showComment(item)"></md-icon>
+                        <md-icon class="md-secondary" style="color:slategray;" aria-label="Chat" md-svg-icon="comment" ng-click="vc.showComment(item)"></md-icon>
                         <!--<md-tooltip ng-show="item.IsChecked ">
                             {{item.CheckedDate | date:'dd.MM.yyyy HH:mm:ss'}}
                         </md-tooltip> -->
@@ -87,9 +91,7 @@
         </md-content>
     </md-toolbar>
 </div>
-
-<div style="position:absolute;right:0;bottom:0;" md-open="false" md-direction="left"
-     ng-class="md-fling">
+<div style="position:absolute;right:0;bottom:0;" md-open="false" md-direction="left" ng-class="md-fling">
     <md-button aria-label="facebook" class="md-fab md-primary md-mini" ng-click="vc.addOptions()">
         <md-icon md-svg-icon="add2"></md-icon>
     </md-button>

@@ -10,7 +10,9 @@
 
     function appParams() {
         return {
-            WebApi:'http://'+window.location.hostname+'/CheckApi/',
+            WebApi:'http://'+window.location.hostname+':8000/',
+            //WebApi:'http://'+window.location.hostname+'/CheckApi/',
+            //WebApi:'http://fonetpacs.fonetyazilim.com/CheckApi/',
             clientId: 'ChecklistApp',
             AppName: "ChecklistApp",
             AppVersion: "0.1.0",
