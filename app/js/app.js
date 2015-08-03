@@ -1,17 +1,18 @@
 (function () {
     'use strict';
 
-    angular.module('app', ['ui.router', 'angular-jwt','fonet-storage','ngMaterial', 'ngResource', 'hSweetAlert', 'ngSanitize', 'commangular','hSweetAlert'])
+    angular.module('app', ['ui.router', 'angular-jwt','fonet-storage','ngMaterial', 'ngResource', 'hSweetAlert', 'ngSanitize', 'commangular','hSweetAlert','cfp.hotkeys'])
         .constant('appParams', appParams())
         .config(['$mdIconProvider', iconConfig])
         .config(['$stateProvider', '$urlRouterProvider', appConfig])
+        .config(['$httpProvider', httpInterceptorConfig])
         .run(['$state','$rootScope','AuthService',appRun]);
 
 
     function appParams() {
         return {
-            WebApi:'http://'+window.location.hostname+':8000/',
-            //WebApi:'http://'+window.location.hostname+'/CheckApi/',
+            //WebApi:'http://'+window.location.hostname+':8000/',
+            WebApi:'http://'+window.location.hostname+'/CheckApi/',
             //WebApi:'http://fonetpacs.fonetyazilim.com/CheckApi/',
             clientId: 'ChecklistApp',
             AppName: "ChecklistApp",
@@ -52,6 +53,32 @@
 
     };
 
+    /** @ngInject */
+    function httpInterceptorConfig($httpProvider) {
+        $httpProvider.interceptors.push(['$q', 'store', pushInterceptor]);
+
+        function pushInterceptor($q, store) {
+            return {
+                request: function (config) {
+                    config.headers = config.headers || {};
+                    var authData = store.get('token');
+                    if (authData) {
+                        config.headers.Authorization = 'Bearer ' + authData.token;
+                    }
+
+                    return config;
+                },
+                response: function (response) {
+                    return response;
+                },
+                responseError: function (rejection) {
+
+                    return $q.reject(rejection);
+                }
+            }
+        }
+    };
+
     function iconConfig($mdIconProvider) {
         $mdIconProvider
             .icon('add', 'images/ic_crop_din_24px.svg')
@@ -88,7 +115,7 @@
             console.log('State Changed');
             console.log(toState);
             /*Route için Authentication Gerekli ise*/
-            if (toState.authentication && toState.url != "/list") {
+            if (toState.authentication) {
                 /*Kullanýcý Login Olmam?? ise */
                 AuthService.isLoginRequired()
                     .then(function(result) {
@@ -101,4 +128,5 @@
             }
         });
     }
+
 })();

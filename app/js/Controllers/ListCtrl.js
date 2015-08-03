@@ -3,10 +3,10 @@
  */
 (function() {
     angular.module('app')
-        .controller('ListCtrl', ['$mdDialog', '$mdSidenav', '$filter', 'CheckLists', 'notify', '$timeout','menu', listCtrl]);
+        .controller('ListCtrl', ['$mdDialog', '$mdSidenav', '$filter', 'CheckLists', 'notify', '$timeout','menu','AuthService','$state','hotkeys', listCtrl]);
 
 
-    function listCtrl($mdDialog, $mdSidenav, $filter, CheckLists, notify, $timeout,menu) {
+    function listCtrl($mdDialog, $mdSidenav, $filter, CheckLists, notify, $timeout,menu,AuthService,$state,hotkeys) {
         var self = this;
         self.menu = menu;
         self.loadCheckList = loadCheckList;
@@ -15,8 +15,10 @@
                 self.Selectedlist = self.Items[self.Items.length - 1];
             }
         });
+
         self.Selectedlist = {};
         self.toggle = toggle;
+        self.logout = logout;
         self.selectItem = selectItem;
         self.showComment = showComment;
         self.addNew = addNew;
@@ -29,6 +31,15 @@
         self.TempItem = self.Items[0];
         self.isVisible = isVisible;
         self.getCheckedCount = getCheckedCount;
+        self.OnlyChecked = true;
+        self.test = test;
+
+        hotkeys.add({
+            combo: 'f7',
+            callback: function() {
+                self.addNew();
+            }
+        });
 
         return self;
 
@@ -69,8 +80,11 @@
         };
 
         function selectItem(item) {
-            console.log(item);
-            self.Selectedlist = item;
+            notify.showLoading();
+            CheckLists.get({id:item.Id},function(data) {
+                self.Selectedlist = data;
+                notify.hideLoading();
+            });
         };
 
         function showComment(item, ev) {
@@ -78,8 +92,8 @@
             $mdDialog.show(
                 $mdDialog.alert()
                 .parent(angular.element(document.body))
-                .title(item.title)
-                .content(item.comments)
+                .title("Bilgi")
+                .content(item.Comment)
                 .ariaLabel('Comment')
                 .ok('Tamam')
                 .targetEvent(ev)
@@ -97,6 +111,8 @@
                 },
                 templateUrl: 'views/templates/AddOptions.tmpl.html',
                 parent: angular.element(document.body),
+                clickOutsideToClose:false,
+                escapeToClose:false,
                 targetEvent: ev,
             }).then(function(test) {
                 notify.showLoading();
@@ -121,6 +137,8 @@
                 },
                 templateUrl: 'views/templates/EditList.tmpl.html',
                 parent: angular.element(document.body),
+                clickOutsideToClose:false,
+                escapeToClose:false,
                 targetEvent: ev,
             }).then(function() {
                 self.loadCheckList();
@@ -159,8 +177,9 @@
         function getCheckedCount() {
             if (self.Selectedlist) {
                 var tool = $filter('filter')(self.Selectedlist.Options, {
-                    IsChecked: true
+                    IsChecked: 1
                 });
+
                 if (tool) {
                     return tool.length;
                 } else {
@@ -169,6 +188,16 @@
             } else {
                 return 0;
             }
+        }
+
+        function logout() {
+            AuthService.logout().then(function(){
+                $state.go('login');
+            });
+        }
+
+        function test(){
+            console.log("Test");
         }
     };
 })();

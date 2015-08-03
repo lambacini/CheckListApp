@@ -3,14 +3,20 @@
  */
 (function(){
     angular.module('app')
-        .controller('EditListCtrl',['Items','$mdDialog','notify','CheckLists',editListCtrl]);
+        .controller('EditListCtrl',['Items','$mdDialog','notify','CheckLists','hotkeys',editListCtrl]);
 
-    function editListCtrl(Items,$mdDialog,notify,CheckLists){
+    function editListCtrl(Items,$mdDialog,notify,CheckLists,hotkeys){
         var self = this;
         self.NewItem = new CheckLists();
 
         self.save = save;
         self.cancel = cancel;
+        hotkeys.add({
+            combo: 'f8',
+            callback: function() {
+                self.save();
+            }
+        });
 
         return self;
 
@@ -46,9 +52,9 @@
  */
 (function(){
     angular.module('app')
-        .controller('AddOptionsCtrl',['item','$mdDialog','notify','CheckLists',addOptionsCtrl]);
+        .controller('AddOptionsCtrl',['$q','item','$mdDialog','notify','CheckLists','hotkeys',addOptionsCtrl]);
 
-    function addOptionsCtrl(item,$mdDialog,notify,CheckLists){
+    function addOptionsCtrl($q,item,$mdDialog,notify,CheckLists,hotkeys){
         var self = this;
         self.Item = item;
         self.TempItem = angular.copy(item);
@@ -57,6 +63,13 @@
         self.save = save;
         self.cancel = cancel;
         self.isChanged = false;
+
+        hotkeys.add({
+            combo: 'f8',
+            callback: function() {
+                self.save();
+            }
+        });
 
         return self;
 
@@ -89,7 +102,12 @@
         };
 
         function save(){
-           $mdDialog.hide(true);
+           checkEmptyItems().then(function(confirm){
+               if(confirm)
+               {
+                   $mdDialog.hide(true);
+               }
+           });
         }
 
         function cancel(){
@@ -106,6 +124,32 @@
             else{
                 $mdDialog.cancel();
             }
+        }
+
+        function checkEmptyItems(){
+            var confirm = true;
+            var defer = $q.defer();
+            var ops = [];
+            self.Item.Options.forEach(function(item,key){
+                var tempDefer = $q.defer();
+                ops.push(tempDefer);
+                if(!item.Title)
+                {
+                    item.isNull = true;
+                    confirm = false;
+                    tempDefer.reject("Title is null");
+                }
+                else{
+                    item.isNull = false;
+                    tempDefer.resolve(true);
+                }
+            });
+
+            $q.all(ops).then(function(test,aa){
+                defer.resolve(confirm);
+            });
+
+            return defer.promise;
         }
     };
 })();

@@ -1,4 +1,4 @@
-<md-dialog aria-label="Mango (Fruit)" style="width:100%;">
+<md-dialog class="noselect" aria-label="Mango (Fruit)" style="width:100%;">
     <md-toolbar>
         <div class="md-toolbar-tools">
             <h2>
@@ -13,10 +13,15 @@
     <md-dialog-content>
         <md-list>
             <md-list-item ng-repeat="item in vc.Item.Options">
-                <md-input-container md-no-float flex>
-                    <input ng-model="item.Title" placeholder="Başlık">
-                </md-input-container>
-                <md-icon class="md-secondary" style="color:red;"  aria-label="Chat" md-svg-icon="delete" ng-click="vc.remove(item)"></md-icon>
+                <div layout layout="column" flex>
+                    <md-input-container md-no-float flex>
+                        <input required  ng-readonly="item.IsChecked" ng-model="item.Title" placeholder="Başlık">
+                    </md-input-container>
+                    <md-input-container md-no-float flex>
+                        <input  ng-readonly="item.IsChecked" ng-model="item.Comment" placeholder="Bilgi">
+                    </md-input-container>
+                </div>
+                <md-icon ng-show="!item.IsChecked" class="md-secondary" style="color:red;"  aria-label="Chat" md-svg-icon="delete" ng-click="vc.remove(item)"></md-icon>
             </md-list-item>
         </md-list>
     </md-dialog-content>

@@ -47,12 +47,12 @@
 
             var data = "grant_type=password&username=" + loginData.UserName + "&password=" + loginData.Password;
             if (loginData.RememberMe) {
-                data = data + "&client_id=FonetWeb";
+                data = data + "&client_id=CheckApp";
             }
 
             var deferred = $q.defer();
 
-            $http.post(appParams.WebApiUrl + 'token', data, { ShowLoading: true }, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+            $http.post(appParams.WebApi + 'token', data, { ShowLoading: true }, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
                 .success(function (response) {
 
                     store.set('token',
@@ -76,11 +76,14 @@
             return deferred.promise;
         }
         function logout() {
+            var deferred = $q.defer();
             store.remove('token');
 
             authentication.isAuth = false;
             authentication.userName = "";
             authentication.useRefreshTokens = false;
+            deferred.resolve(true);
+            return deferred.promise;
         };
         function fillAuthData() {
             var def = $q.defer();
