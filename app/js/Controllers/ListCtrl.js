@@ -3,10 +3,10 @@
  */
 (function() {
     angular.module('app')
-        .controller('ListCtrl', ['$mdDialog', '$mdSidenav', '$filter', 'CheckLists', 'notify', '$timeout','menu','AuthService','$state','hotkeys', listCtrl]);
+        .controller('ListCtrl', ['$q','$mdDialog', '$mdSidenav', '$filter', 'CheckLists', 'notify', '$timeout','menu','AuthService','$state','hotkeys','appParams', listCtrl]);
 
 
-    function listCtrl($mdDialog, $mdSidenav, $filter, CheckLists, notify, $timeout,menu,AuthService,$state,hotkeys) {
+    function listCtrl($q,$mdDialog, $mdSidenav, $filter, CheckLists, notify, $timeout,menu,AuthService,$state,hotkeys,appParams) {
         var self = this;
         self.menu = menu;
         self.loadCheckList = loadCheckList;
@@ -15,7 +15,6 @@
                 self.Selectedlist = self.Items[self.Items.length - 1];
             }
         });
-
         self.Selectedlist = {};
         self.toggle = toggle;
         self.logout = logout;
@@ -26,15 +25,20 @@
         self.addOptions = addOptions;
         self.openSideBar = openSideBar;
         self.openMenu = openMenu;
+        self.shareList = shareList;
         self.OnlyChecked = false;
         self.ListType = "Tümü";
         self.ChangeList = ChangeList;
         self.TempItem = self.Items[0];
         self.isVisible = isVisible;
         self.getCheckedCount = getCheckedCount;
+        self.getCheckedCountForItem = getCheckedCountForItem;
         self.OnlyChecked = true;
         self.test = test;
-
+        self.sections = [
+            { Name:"Listelerim" },
+            {Name:"Paylaşılanlar"}
+        ]
         hotkeys.add({
             combo: 'f7',
             callback: function() {
@@ -58,25 +62,47 @@
         }
 
         function toggle(item) {
-            self.Selectedlist.Options.forEach(function(listItem, key) {
-                if (item.Id == listItem.Id) {
-                    if (item.IsChecked) {
-                        item.checkDate = Date.now();
-                    } else {
-                        item.checkDate = "";
+            var defer = $q.defer();
+
+            if(item.IsChecked == 0)
+            {
+                item.IsChecked = 1;
+                defer.resolve(true);
+            }
+            else
+            {
+                notify.confirm('İptal', 'Seçim iptal edilecek eminmisiniz ?').then(function(isConfirm) {
+                    if (isConfirm) {
+                        item.IsChecked = 0;
+                        defer.resolve(true);
                     }
-                    item.isBusy = true;
+                    else{
+                        defer.reject();
+                    }
+                });
+            }
 
-                    CheckLists.update({
-                        id: self.Selectedlist.Id
-                    }, self.Selectedlist, function(data) {
+            defer.promise.then(function(){
+                self.Selectedlist.Options.forEach(function(listItem, key) {
+                    if (item.Id == listItem.Id) {
+                        if (item.IsChecked) {
+                            item.checkDate = Date.now();
+                        } else {
+                            item.checkDate = "";
+                        }
+                        item.isBusy = true;
 
-                        $timeout(function() {
-                            //notify.hideLoading();
-                            item.isBusy = false;
+                        CheckLists.update({
+                            id: self.Selectedlist.Id
+                        }, self.Selectedlist, function(data) {
+
+                            $timeout(function() {
+                                //notify.hideLoading();
+                                item.isBusy = false;
+                            });
                         });
-                    });
-                }
+                    }
+                });
             });
         };
 
@@ -89,16 +115,29 @@
         };
 
         function showComment(item, ev) {
-            console.log(item);
-            $mdDialog.show(
-                $mdDialog.alert()
-                .parent(angular.element(document.body))
-                .title("Bilgi")
-                .content(item.Comment)
-                .ariaLabel('Comment')
-                .ok('Tamam')
-                .targetEvent(ev)
-            );
+            $mdDialog.show({
+                controller: "CommentsCtrl",
+                controllerAs: 'vc',
+                resolve: {
+                    Item: function() {
+                        return item;
+                    }
+                },
+                templateUrl: 'views/templates/comments.tmpl.html',
+                parent: angular.element(document.body),
+                clickOutsideToClose:false,
+                escapeToClose:true,
+                targetEvent: ev,
+            }).then(function(data){
+                notify.showLoading();
+                CheckLists.update({
+                    id: self.Selectedlist.Id
+                }, self.Selectedlist, function(data) {
+                    $timeout(function() {
+                        notify.hideLoading();
+                    });
+                });
+            });
         }
 
         function addOptions(ev) {
@@ -212,9 +251,45 @@
             }
         }
 
+        function getCheckedCountForItem(item) {
+            if (self.Selectedlist) {
+                var tool = $filter('filter')(item.Options, {
+                    IsChecked: 1
+                });
+
+                if (tool) {
+                    return tool.length;
+                } else {
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
+        }
+
+
         function logout() {
             AuthService.logout().then(function(){
                 $state.go('login');
+            });
+        }
+
+        function shareList(ev){
+            $mdDialog.show({
+                controller: "ShareCtrl",
+                controllerAs: 'vc',
+                resolve: {
+                    Item: function() {
+                        return self.selectItem;
+                    }
+                },
+                templateUrl: 'views/templates/ShareList.tmpl.html',
+                parent: angular.element(document.body),
+                clickOutsideToClose:false,
+                escapeToClose:true,
+                targetEvent: ev,
+            }).then(function(data){
+
             });
         }
 

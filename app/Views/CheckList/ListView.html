@@ -1,41 +1,51 @@
 <div layout="row" flex >
     <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
-        <md-toolbar class="md-primary md-hue-3">
+        <md-toolbar class="md-primary md-hue-1 md-default-theme md-whiteframe-glow-z2">
             <div class="md-toolbar-tools">
                 <h2>
                     <span>CheckApp</span>
                 </h2>
                 <span flex></span>
+                <md-button class="md-icon-button" aria-label="More" ng-click="vc.loadCheckList()">
+                    <md-icon style="width:16px;height:16px;" md-svg-icon="refresh"></md-icon>
+                </md-button>
                 <md-button class="md-icon-button" aria-label="More" ng-click="vc.editList()">
-                    <md-icon md-svg-icon="edit"></md-icon>
+                    <md-icon style="width:16px;height:16px;"  md-svg-icon="edit"></md-icon>
                 </md-button>
                 <md-button class="md-icon-button" aria-label="More" ng-click="vc.addNew()">
-                    <md-icon md-svg-icon="add2"></md-icon>
+                    <md-icon style="width:16px;height:16px;"  md-svg-icon="add2"></md-icon>
                 </md-button>
             </div>
         </md-toolbar>
         <md-content flex layout-padding>
             <ul class="docs-menu">
-                <li class="parent-list-item" data-ng-repeat="item in vc.Items">
-                    <a class="md-button md-default-theme" ng-click="vc.selectItem(item)" tabindex="0" >
-                        <span class="ng-binding ng-scope">
-                            {{item.Title}}
-                        </span>
-                    </a>
+                <li class="menu-nested-list" data-ng-repeat="(key,value) in vc.Items | groupBy:'Group'">
+                    <h2 class="menu-heading md-subhead ng-binding ng-scope" id="heading_DocumentationVersion">
+                        {{key}}
+                    </h2>
+                    <ul id="docs-menu-Demos" class="menu-toggle-list">
+                        <li ng-repeat="list in value">
+                            <a class="md-button md-default-theme" ng-click="vc.selectItem(list)" tabindex="0" >
+                                <span class="ng-binding ng-scope">
+                                    {{list.Title}} - <span style="color:#ff4c51">{{ vc.getCheckedCountForItem(list) }} / {{ list.Options.length}}</span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </md-content>
     </md-sidenav>
-    <md-toolbar class="md-default-theme md-whiteframe-glow-z2">
+    <md-toolbar class=" site-content-toolbar md-default-theme">
         <div class="md-toolbar-tools" tabindex="0">
             <md-button class="md-icon-button md-primary docs-menu-icon" aria-label="Toggle Menu" ng-click="vc.openSideBar()">
                 <md-icon style="color:white" md-svg-icon="menu" class="ng-isolate-scope md-default-theme" aria-hidden="true">
                 </md-icon>
             </md-button>
             <div layout="row" flex class="fill-height">
-                <div class="md-toolbar-item md-breadcrumb">
-                    {{vc.Selectedlist.Title}} - <span style="color:#ff4c51">{{ vc.getCheckedCount() }} / {{ vc.Selectedlist.Options.length}}
-                </div>
+                    <div class="md-toolbar-item md-breadcrumb">
+                        {{vc.Selectedlist.Title}} - <span style="color:#ff4c51">{{ vc.getCheckedCount() }} / {{ vc.Selectedlist.Options.length}}</span>
+                    </div>
                 <span flex></span>
             </div>
             <md-menu>
@@ -64,7 +74,6 @@
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
-
         </div>
         <md-content flex layout-padding>
             <div layout="column" layout-fill layout-align="top center">
@@ -83,7 +92,8 @@
                 <md-list>
                     <md-list-item ng-show="vc.isVisible(item)" ng-repeat="item in vc.Selectedlist.Options">
                         <div ng-show="item.isBusy" style="margin-right:10px;"><img src="images/loading.gif"></div>
-                        <md-checkbox ng-show="!item.isBusy" ng-change="vc.toggle(item)" class="md-primary" ng-model="item.IsChecked" ng-true-value="1" ng-false-value="0"></md-checkbox>
+                        <md-checkbox ng-show="!item.isBusy" ng-click="vc.toggle(item)"
+                                     ng-checked="item.IsChecked" class="md-primary"  ng-true-value="1" ng-false-value="0"></md-checkbox>
                         <p class="listItem" ng-class="[{'strike':item.IsChecked}]">{{ item.Title }}</p>
                         <md-icon class="md-secondary" style="color:slategray;" aria-label="Chat" md-svg-icon="comment" ng-click="vc.showComment(item)"></md-icon>
                         <!--<md-tooltip ng-show="item.IsChecked ">
@@ -101,7 +111,7 @@
     <md-button aria-label="facebook" class="md-fab md-primary md-mini" ng-click="vc.addOptions()">
         <md-icon md-svg-icon="edit"></md-icon>
     </md-button>
-    <md-button aria-label="facebook" class="md-fab md-primary md-mini">
+    <md-button aria-label="facebook" class="md-fab md-primary md-mini" ng-click="vc.shareList()">
         <md-icon md-svg-icon="share"></md-icon>
     </md-button>
 </div>

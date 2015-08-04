@@ -48,7 +48,6 @@
                         $mdDialog.hide(true);
                     });
             } else {
-                self.NewItem.group = 0;
                 self.NewItem.CTime = Date.now();
 
                 self.NewItem.$save(function() {

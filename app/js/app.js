@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('app', ['ui.router', 'angular-jwt','fonet-storage','ngMaterial', 'ngResource', 'hSweetAlert', 'ngSanitize', 'commangular','hSweetAlert','cfp.hotkeys'])
+    angular.module('app', ['ui.router', 'angular-jwt','fonet-storage','ngMaterial', 'ngResource', 'hSweetAlert', 'ngSanitize', 'commangular','hSweetAlert','cfp.hotkeys','angular-timeline','angular.filter'])
         .constant('appParams', appParams())
         .config(['$mdIconProvider', iconConfig])
         .config(['$stateProvider', '$urlRouterProvider', appConfig])
@@ -11,12 +11,19 @@
 
     function appParams() {
         return {
-            WebApi:'http://'+window.location.hostname+':8000/',
-            //WebApi:'http://'+window.location.hostname+'/CheckApi/',
+            //WebApi:'http://'+window.location.hostname+':8000/',
+            WebApi:'http://'+window.location.hostname+'/CheckApi/',
             //WebApi:'http://fonetpacs.fonetyazilim.com/CheckApi/',
             clientId: 'ChecklistApp',
             AppName: "ChecklistApp",
             AppVersion: "0.1.0",
+            UserInfo:{
+                username:"",
+                name:"",
+                surname:"",
+                userId:"",
+                email:""
+            },
             isMobile: false
         };
     };
@@ -112,14 +119,12 @@
 
     function appRun($state,$rootScope,AuthService){
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-            console.log('State Changed');
-            console.log(toState);
-            /*Route için Authentication Gerekli ise*/
+
             if (toState.authentication) {
+                console.log("Authentication Required.Checking...");
                 /*Kullanýcý Login Olmam?? ise */
                 AuthService.isLoginRequired()
                     .then(function(result) {
-                        console.log('stateChangeStart : ' + result);
                         if (result) {
                             $state.transitionTo('login');
                             event.preventDefault();

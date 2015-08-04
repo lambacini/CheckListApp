@@ -6,7 +6,6 @@
 
     /* @ngInject */
     function authService($q, $http, $log, jwtHelper, appParams, $location, $state, store) {
-        console.log('authService initializing !');
         var self = this;
 
         self.ping = ping;
@@ -16,9 +15,12 @@
         self.isLoginRequired = isLoginRequred;
         self.fillAuthData = fillAuthData;
 
-        var authentication = {
+        self.authentication = {
             isAuth: false,
             userName: "",
+            name:"",
+            surname:"",
+            userId:"",
             refreshToken: "",
             useRefreshToken: true
         };
@@ -63,10 +65,16 @@
                             useRefreshTokens: true
                         });
 
-                    authentication.isAuth = true;
-                    authentication.userName = loginData.userName;
-                    authentication.useRefreshTokens = loginData.useRefreshTokens;
+                    var tokenData = jwtHelper.decodeToken(response.access_token);
 
+                    self.authentication.name = tokenData.given_name;
+                    self.authentication.surname = tokenData.family_name;
+                    self.authentication.userName = tokenData.unique_name;
+                    self.authentication.userId = tokenData.nameid;
+                    self.authentication.isAuth = true;
+                    self.authentication.useRefreshTokens = loginData.useRefreshTokens;
+
+                    console.log(self.authentication);
                     deferred.resolve(response);
 
                 }).error(function (err, status) {
@@ -79,9 +87,9 @@
             var deferred = $q.defer();
             store.remove('token');
 
-            authentication.isAuth = false;
-            authentication.userName = "";
-            authentication.useRefreshTokens = false;
+            self.authentication.isAuth = false;
+            self.authentication.userName = "";
+            self.authentication.useRefreshTokens = false;
             deferred.resolve(true);
             return deferred.promise;
         };
@@ -89,11 +97,21 @@
             var def = $q.defer();
             var authData = store.get('token');
 
-
             if (authData) {
-                authentication.isAuth = true;
-                authentication.userName = authData.userName;
-                authentication.useRefreshTokens = authData.useRefreshTokens;
+                var tokenData = jwtHelper.decodeToken(authData.token);
+
+                appParams.UserInfo.username =tokenData.unique_name;
+                appParams.UserInfo.userId =tokenData.nameid;
+                appParams.UserInfo.name =tokenData.given_name;
+                appParams.UserInfo.surname =tokenData.family_name;
+
+                self.authentication.name = tokenData.given_name;
+                self.authentication.surname = tokenData.family_name;
+                self.authentication.userName = tokenData.unique_name;
+                self.authentication.userId = tokenData.nameid;
+                self.authentication.isAuth = true;
+                self.authentication.useRefreshTokens = authData.useRefreshTokens;
+
                 def.resolve(true);
             } else {
                 def.reject("");
@@ -143,13 +161,15 @@
             return deferred.promise;
         };
         function isLoginRequred() {
+            console.log("Check IsLogin Required");
             var def = $q.defer();
             try {
                 var authinfo = store.get('token');
                 if (authinfo) {
                     if (authinfo.token) {
                         if (!jwtHelper.isTokenExpired(authinfo.token)) {
-                            console.log("token valid loginRequired = false");
+                            console.log("Login Expired : false");
+                            self.fillAuthData();
                             def.resolve(false);
                         } else {
                             console.log("token expired loginRequired = true");

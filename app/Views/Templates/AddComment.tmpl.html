@@ -2,7 +2,7 @@
     <md-toolbar>
         <div class="md-toolbar-tools">
             <h2>
-                <span>{{ vc.Item.title}}</span>
+                Bilgi Notları
             </h2>
             <span flex></span>
             <md-button class="md-icon-button" aria-label="More" ng-click="vc.addNew()">
@@ -11,16 +11,19 @@
         </div>
     </md-toolbar>
     <md-dialog-content>
-        <md-list>
-            <md-list-item ng-repeat="item in vc.Item.Options">
-                <div layout layout="column" flex>
-                    <md-input-container md-no-float flex>
-                        <input required  ng-readonly="item.IsChecked" ng-model="item.Title" placeholder="Başlık">
-                    </md-input-container>
-                </div>
-                <md-icon ng-show="!item.IsChecked" class="md-secondary" style="color:red;"  aria-label="Chat" md-svg-icon="delete" ng-click="vc.remove(item)"></md-icon>
-            </md-list-item>
-        </md-list>
+        <timeline>
+            <timeline-event ng-repeat="event in vc.events">
+                <timeline-badge class="{{event.badgeClass}}">
+                    <i class="glyphicon {{event.badgeIconClass}}"></i>
+                </timeline-badge>
+                <timeline-panel class="{{event.badgeClass}}">
+                    <timeline-heading>
+                        <h4>{{event.title}}</h4>
+                    </timeline-heading>
+                    <p>{{event.content}}</p>
+                </timeline-panel>
+            </timeline-event>
+        </timeline>
     </md-dialog-content>
     <div class="md-actions" layout="row">
         <span flex></span>

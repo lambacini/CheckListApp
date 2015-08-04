@@ -1,0 +1,37 @@
+<md-dialog class="noselect" aria-label="Mango (Fruit)" style="width:100%;">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>
+                Bilgi Notları
+            </h2>
+            <span flex></span>
+            <md-button class="md-icon-button" aria-label="More" ng-click="vc.addComment()">
+                <md-icon md-svg-icon="add2"></md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <timeline>
+            <timeline-event ng-repeat="event in vc.events">
+                <timeline-badge class="{{event.badgeClass}}">
+                    <i class="glyphicon {{event.badgeIconClass}}"></i>
+                </timeline-badge>
+                <timeline-panel class="{{event.badgeClass}}">
+                    <timeline-heading>
+                        <h4>{{event.title}}</h4>
+                    </timeline-heading>
+                    <p>{{event.content}}</p>
+                </timeline-panel>
+            </timeline-event>
+        </timeline>
+    </md-dialog-content>
+    <div class="md-actions" layout="row">
+        <span flex></span>
+        <md-button ng-click="vc.save()" class="md-primary">
+            Kaydet
+        </md-button>
+        <md-button ng-click="vc.cancel()" class="md-primary">
+            Vazgeç
+        </md-button>
+    </div>
+</md-dialog>
