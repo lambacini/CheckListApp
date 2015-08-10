@@ -43,17 +43,13 @@
             {Name:"Paylaşılanlar"}
         ]
 
-        var clientProxy  = signalRHubProxy(signalRHubProxy.defaultServer,'CheckListHub');
-
-        clientProxy.on('sayHello',function(data){
-           if(self.Selectedlist)
-           {
-            if(data.Id == self.Selectedlist.Id){
-            self.Selectedlist = data;
-           }
-           }
+        var checkSync = $.connection.checkListHub;
+        checkSync.client.sayHello = function(name,data){
+            console.log(data);
+        };
+        $.connection.hub.start().done(function(){
+            
         });
-
         hotkeys.add({
             combo: 'f7',
             callback: function() {

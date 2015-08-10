@@ -22,7 +22,7 @@
                 console.log(connection);
                 console.log(proxy);
 
-                connection.start(startOptions).done(function () { });
+                connection.start({ transport: 'longPolling' }).done(function () { });
 
                 return {
                     on: function (eventName, callback) {
