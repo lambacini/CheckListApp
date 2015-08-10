@@ -3,10 +3,10 @@
  */
 (function() {
     angular.module('app')
-        .controller('ListCtrl', ['$q','$mdDialog', '$mdSidenav', '$filter', 'CheckLists', 'notify', '$timeout','menu','AuthService','$state','hotkeys','appParams','signalRHubProxy', listCtrl]);
+        .controller('ListCtrl', ['store','$q','$mdDialog', '$mdSidenav', '$filter', 'CheckLists', 'notify', '$timeout','menu','AuthService','$state','hotkeys','appParams','signalRHubProxy', listCtrl]);
 
 
-    function listCtrl($q,$mdDialog, $mdSidenav, $filter, CheckLists, notify, $timeout,menu,AuthService,$state,hotkeys,appParams,signalRHubProxy) {
+    function listCtrl(store,$q,$mdDialog, $mdSidenav, $filter, CheckLists, notify, $timeout,menu,AuthService,$state,hotkeys,appParams,signalRHubProxy) {
         var self = this;
         self.menu = menu;
         self.loadCheckList = loadCheckList;
@@ -43,12 +43,19 @@
             {Name:"Paylaşılanlar"}
         ]
 
+        var authData = store.get('token');
+                console.log(authData);
+                if (authData) {
+                    $.signalR.ajaxDefaults.headers= {Authorization : "Bearer "+authData.token};
+
+                }
+        $.connection.hub.url = "http://localhost:8000/signalr";
         var checkSync = $.connection.checkListHub;
-        checkSync.client.sayHello = function(name,data){
+        checkSync.client.sayHello = function(data){
             console.log(data);
         };
         $.connection.hub.start().done(function(){
-            
+
         });
         hotkeys.add({
             combo: 'f7',
