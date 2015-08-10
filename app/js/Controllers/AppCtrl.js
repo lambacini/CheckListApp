@@ -4,11 +4,17 @@
  */
 (function(){
     angular.module('app')
-        .controller('AppCtrl',[appCtrl]);
+        .controller('AppCtrl',['signalRHubProxy',appCtrl]);
 
-    function appCtrl(){
+    function appCtrl(signalRHubProxy){
     	var self = this;
-    	
+
+        var clientProxy  = signalRHubProxy(signalRHubProxy.defaultServer,'CheckListHub');
+
+        clientProxy.on('sayHello',function(data){
+           console.log(data);
+        });
+
     	return self;
     };
 })();

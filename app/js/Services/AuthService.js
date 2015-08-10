@@ -105,6 +105,7 @@
                 appParams.UserInfo.name =tokenData.given_name;
                 appParams.UserInfo.surname =tokenData.family_name;
 
+                console.log(appParams.UserInfo);
                 self.authentication.name = tokenData.given_name;
                 self.authentication.surname = tokenData.family_name;
                 self.authentication.userName = tokenData.unique_name;

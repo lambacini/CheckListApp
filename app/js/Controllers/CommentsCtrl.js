@@ -83,5 +83,6 @@
         function cancel(){
             $mdDialog.cancel();
         }
+
     };
 })();

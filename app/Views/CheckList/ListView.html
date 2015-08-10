@@ -1,6 +1,6 @@
 <div layout="row" flex >
     <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
-        <md-toolbar class="md-primary md-hue-1 md-default-theme md-whiteframe-glow-z2">
+        <md-toolbar class="md-primary md-hue-2 md-default-theme md-whiteframe-glow-z2">
             <div class="md-toolbar-tools">
                 <h2>
                     <span>CheckApp</span>
@@ -90,9 +90,9 @@
                     </div>
                 </div>
                 <md-list>
-                    <md-list-item ng-show="vc.isVisible(item)" ng-repeat="item in vc.Selectedlist.Options">
+                    <md-list-item  ng-show="vc.isVisible(item)" ng-repeat="item in vc.Selectedlist.Options">
                         <div ng-show="item.isBusy" style="margin-right:10px;"><img src="images/loading.gif"></div>
-                        <md-checkbox ng-show="!item.isBusy" ng-click="vc.toggle(item)"
+                        <md-checkbox ng-disabled="!vc.IsAllowEdit()" ng-show="!item.isBusy" ng-click="vc.toggle(item)"
                                      ng-checked="item.IsChecked" class="md-primary"  ng-true-value="1" ng-false-value="0"></md-checkbox>
                         <p class="listItem" ng-class="[{'strike':item.IsChecked}]">{{ item.Title }}</p>
                         <md-icon class="md-secondary" style="color:slategray;" aria-label="Chat" md-svg-icon="comment" ng-click="vc.showComment(item)"></md-icon>
@@ -108,10 +108,10 @@
     </md-toolbar>
 </div>
 <div style="position:absolute;right:0;bottom:0;" md-open="false" md-direction="left" ng-class="md-fling">
-    <md-button aria-label="facebook" class="md-fab md-primary md-mini" ng-click="vc.addOptions()">
+    <md-button ng-show="vc.IsAllowAddOptions()" aria-label="facebook" class="md-fab md-primary md-mini" ng-click="vc.addOptions()">
         <md-icon md-svg-icon="edit"></md-icon>
     </md-button>
-    <md-button aria-label="facebook" class="md-fab md-primary md-mini" ng-click="vc.shareList()">
+    <md-button ng-show="vc.IsOwner()" aria-label="facebook" class="md-fab md-primary md-mini" ng-click="vc.shareList()">
         <md-icon md-svg-icon="share"></md-icon>
     </md-button>
 </div>

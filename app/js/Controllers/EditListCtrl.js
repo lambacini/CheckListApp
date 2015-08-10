@@ -3,15 +3,16 @@
  */
 (function() {
     angular.module('app')
-        .controller('EditListCtrl', ['Item', '$mdDialog', 'notify', 'CheckLists', 'hotkeys', editListCtrl]);
+        .controller('EditListCtrl', ['appParams','Item', '$mdDialog', 'notify','AuthService', 'CheckLists', 'hotkeys', editListCtrl]);
 
-    function editListCtrl(Item, $mdDialog, notify, CheckLists, hotkeys) {
+    function editListCtrl(appParams,Item, $mdDialog, notify,AuthService, CheckLists, hotkeys) {
         var self = this;
         self.NewItem = Item;
         self.save = save;
         self.cancel = cancel;
         self.remove = remove;
         self.init = init;
+        self.IsOwner = IsOwner;
         self.isChanged = false;
         hotkeys.add({
             combo: 'f8',
@@ -69,6 +70,22 @@
                 $mdDialog.cancel();
             }
         }
+
+        function IsOwner(){
+            if(!self.IsEdit)
+            {
+                return true;
+            }
+
+            if(self.NewItem.UserId == appParams.UserInfo.userId)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     };
 })();
 
@@ -77,12 +94,13 @@
  */
 (function() {
     angular.module('app')
-        .controller('AddOptionsCtrl', ['$q', 'item', '$mdDialog', 'notify', 'CheckLists', 'hotkeys', addOptionsCtrl]);
+        .controller('AddOptionsCtrl', ['$q','appParams', 'item', '$mdDialog', 'notify', 'CheckLists', 'hotkeys', addOptionsCtrl]);
 
-    function addOptionsCtrl($q, item, $mdDialog, notify, CheckLists, hotkeys) {
+    function addOptionsCtrl($q,appParams, item, $mdDialog, notify, CheckLists, hotkeys) {
         var self = this;
         self.Item = item;
         self.TempItem = angular.copy(item);
+        self.IsAllowAddOptions = IsAllowAddOptions;
         self.addNew = addNew;
         self.remove = remove;
         self.save = save;
@@ -101,7 +119,7 @@
 
         function addNew() {
             self.Item.Options.push({
-                isChecked: false,
+                IsChecked: 0,
                 title: '',
                 comments: '',
                 checkDate: ''
@@ -167,6 +185,22 @@
             });
 
             return defer.promise;
+        }
+
+        function IsAllowAddOptions(){
+            if(self.Item.UserId == appParams.UserInfo.userId)
+            {
+                return true;
+            }
+            else{
+                if(self.Item.UserCanBeEdit == 1)
+                {
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
         }
     };
 })();

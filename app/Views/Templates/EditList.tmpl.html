@@ -6,31 +6,36 @@
         </div>
     </md-toolbar>
     <md-dialog-content >
-        <div layout="column" layout-sm="column">
+        <div layout="column" layout-sm="column" ng-disabled="!vc.IsOwner()">
             <md-input-container md-no-float flex>
-                <input ng-model="vc.NewItem.Title" placeholder="Başlık">
+                <input ng-model="vc.NewItem.Title" placeholder="Başlık"  ng-disabled="!vc.IsOwner()">
             </md-input-container>
             <md-input-container md-no-float flex>
-                <input ng-model="vc.NewItem.Group" placeholder="Grup (Büyük Küçük Harf Duyarlı)">
+                <input ng-model="vc.NewItem.Group" placeholder="Grup (Büyük Küçük Harf Duyarlı)"  ng-disabled="!vc.IsOwner()">
             </md-input-container>
             <md-input-container flex>
-                <md-switch aria-label="Accept All Device" ng-model="vc.NewItem.UserCanBeEdit" ng-true-value="1" ng-false-value="0" class="md-primary">
+                <md-switch aria-label="AllowEdit" ng-model="vc.NewItem.UserCanBeEdit" ng-true-value="1" ng-false-value="0" class="md-primary"  ng-disabled="!vc.IsOwner()">
                     Paylaştığım Kişiler Değiştirebilsin
                 </md-switch>
             </md-input-container>
             <md-input-container flex>
-                <md-switch  aria-label="Accept All Device" ng-model="vc.NewItem.InOrder" ng-true-value="1" ng-false-value="0" class="md-primary">
+                <md-switch aria-label="AddOptions" ng-model="vc.NewItem.UserCanBeAdd" ng-true-value="1" ng-false-value="0" class="md-primary"  ng-disabled="!vc.IsOwner()">
+                    Paylaştığım Kişiler Seçenek Ekleyebilsin.
+                </md-switch>
+            </md-input-container>
+            <md-input-container flex>
+                <md-switch  aria-label="Accept All Device" ng-model="vc.NewItem.InOrder" ng-true-value="1" ng-false-value="0" class="md-primary"  ng-disabled="!vc.IsOwner()">
                     Liste Sıralı İşaretlensin.
                 </md-switch>
             </md-input-container>
         </div>
     </md-dialog-content>
-    <div class="md-actions" layout="row">
+    <div  class="md-actions" layout="row">
         <span flex></span>
-        <md-button ng-click="vc.save()" class="md-primary">
+        <md-button ng-show="vc.IsOwner()" ng-click="vc.save()" class="md-primary">
             Kaydet
         </md-button>
-        <md-button ng-if="vc.IsEdit" ng-click="vc.remove()" class="md-warn">
+        <md-button  ng-show="vc.IsOwner()" ng-if="vc.IsEdit" ng-click="vc.remove()" class="md-warn">
             Sil
         </md-button>
         <md-button ng-click="vc.cancel()" class="md-primary">

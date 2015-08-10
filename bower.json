@@ -31,6 +31,7 @@
     "angular-jwt": "~0.0.9",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.4.5",
     "angular-timeline": "~1.5.2",
-    "angular-filter": "~0.5.4"
+    "angular-filter": "~0.5.4",
+    "signalr": "~2.2.0"
   }
 }

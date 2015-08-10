@@ -31,7 +31,7 @@
                     $scope.formState = false;
                     $log.error(error);
                     if (error == 400)
-                        notify.toast('Kullanýcý Adý / Þifre Hatalý !');
+                        notify.toast('KullanÄ±cÄ± AdÄ± / Åžifre HatalÄ± !');
                 });
 
         };

@@ -16,6 +16,9 @@
             }
         });
         self.Selectedlist = {};
+        self.IsAllowEdit =IsAllowEdit;
+        self.IsAllowAddOptions =IsAllowAddOptions;
+        self.IsOwner = IsOwner;
         self.toggle = toggle;
         self.logout = logout;
         self.selectItem = selectItem;
@@ -39,6 +42,8 @@
             { Name:"Listelerim" },
             {Name:"Paylaşılanlar"}
         ]
+
+
         hotkeys.add({
             combo: 'f7',
             callback: function() {
@@ -64,7 +69,11 @@
         function toggle(item) {
             var defer = $q.defer();
 
-            if(item.IsChecked == 0)
+            if(!self.IsAllowEdit())
+            {
+                defer.reject();
+            }
+            else if(item.IsChecked == 0)
             {
                 item.IsChecked = 1;
                 defer.resolve(true);
@@ -90,6 +99,8 @@
                         } else {
                             item.checkDate = "";
                         }
+
+                        item.CheckedUserId = appParams.UserInfo.userId;
                         item.isBusy = true;
 
                         CheckLists.update({
@@ -267,7 +278,6 @@
             }
         }
 
-
         function logout() {
             AuthService.logout().then(function(){
                 $state.go('login');
@@ -280,7 +290,7 @@
                 controllerAs: 'vc',
                 resolve: {
                     Item: function() {
-                        return self.selectItem;
+                        return self.Selectedlist;
                     }
                 },
                 templateUrl: 'views/templates/ShareList.tmpl.html',
@@ -295,6 +305,49 @@
 
         function test(){
             console.log("Test");
+        }
+
+        function IsAllowEdit(){
+            if(self.Selectedlist.UserId == appParams.UserInfo.userId)
+            {
+                return true;
+            }
+            else{
+                if(self.Selectedlist.UserCanBeEdit == 1)
+                {
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
+
+        function IsAllowAddOptions(){
+            if(self.Selectedlist.UserId == appParams.UserInfo.userId)
+            {
+                return true;
+            }
+            else{
+                if(self.Selectedlist.UserCanBeAdd == 1)
+                {
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
+
+        function IsOwner(){
+            if(self.Selectedlist.UserId == appParams.UserInfo.userId)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     };
 })();
