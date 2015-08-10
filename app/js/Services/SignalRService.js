@@ -12,8 +12,13 @@
                     $.signalR.ajaxDefaults.headers= {Authorization : "Bearer "+authData.token};
 
                 }
+
+                //var connection = $.hubConnection('http://'+window.location.hostname+'/CheckApi');
                 var connection = $.hubConnection('http://'+window.location.hostname+':8000/');
+                connection.logging = false;
+                
                 var proxy = connection.createHubProxy(hubName);
+
                 console.log(connection);
                 console.log(proxy);
 

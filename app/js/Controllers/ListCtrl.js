@@ -3,10 +3,10 @@
  */
 (function() {
     angular.module('app')
-        .controller('ListCtrl', ['$q','$mdDialog', '$mdSidenav', '$filter', 'CheckLists', 'notify', '$timeout','menu','AuthService','$state','hotkeys','appParams', listCtrl]);
+        .controller('ListCtrl', ['$q','$mdDialog', '$mdSidenav', '$filter', 'CheckLists', 'notify', '$timeout','menu','AuthService','$state','hotkeys','appParams','signalRHubProxy', listCtrl]);
 
 
-    function listCtrl($q,$mdDialog, $mdSidenav, $filter, CheckLists, notify, $timeout,menu,AuthService,$state,hotkeys,appParams) {
+    function listCtrl($q,$mdDialog, $mdSidenav, $filter, CheckLists, notify, $timeout,menu,AuthService,$state,hotkeys,appParams,signalRHubProxy) {
         var self = this;
         self.menu = menu;
         self.loadCheckList = loadCheckList;
@@ -43,6 +43,16 @@
             {Name:"Paylaşılanlar"}
         ]
 
+        var clientProxy  = signalRHubProxy(signalRHubProxy.defaultServer,'CheckListHub');
+
+        clientProxy.on('sayHello',function(data){
+           if(self.Selectedlist)
+           {
+            if(data.Id == self.Selectedlist.Id){
+            self.Selectedlist = data;
+           }
+           }
+        });
 
         hotkeys.add({
             combo: 'f7',
