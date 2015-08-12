@@ -3,10 +3,10 @@
  */
 (function() {
     angular.module('app')
-        .controller('ListCtrl', ['store','$q','$mdDialog', '$mdSidenav', '$filter', 'CheckLists', 'notify', '$timeout','menu','AuthService','$state','hotkeys','appParams','signalRHubProxy', listCtrl]);
+        .controller('ListCtrl', ['$scope','store','$q','$mdDialog', '$mdSidenav', '$filter', 'CheckLists', 'notify', '$timeout','menu','AuthService','$state','hotkeys','appParams','signalRHubProxy', listCtrl]);
 
 
-    function listCtrl(store,$q,$mdDialog, $mdSidenav, $filter, CheckLists, notify, $timeout,menu,AuthService,$state,hotkeys,appParams,signalRHubProxy) {
+    function listCtrl($scope,store,$q,$mdDialog, $mdSidenav, $filter, CheckLists, notify, $timeout,menu,AuthService,$state,hotkeys,appParams,signalRHubProxy) {
         var self = this;
         self.menu = menu;
         self.loadCheckList = loadCheckList;
@@ -43,20 +43,32 @@
             {Name:"Paylaşılanlar"}
         ]
 
+        /*
         var authData = store.get('token');
                 console.log(authData);
                 if (authData) {
                     $.signalR.ajaxDefaults.headers= {Authorization : "Bearer "+authData.token};
 
-                }
-        $.connection.hub.url = "http://localhost:8000/signalr";
+                };
+
+        $.connection.hub.url = "http://10.63.10.78:8000/signalr";
         var checkSync = $.connection.checkListHub;
         checkSync.client.sayHello = function(data){
+            
             console.log(data);
+            if(self.Selectedlist.Id && data.Id)
+            {
+                $scope.$apply(function(){
+                    self.Selectedlist = data;
+                });
+            }
         };
         $.connection.hub.start().done(function(){
 
         });
+
+        */
+        
         hotkeys.add({
             combo: 'f7',
             callback: function() {
@@ -131,6 +143,8 @@
         };
 
         function selectItem(item) {
+            $mdSidenav('left').close();
+            
             notify.showLoading();
             CheckLists.get({id:item.Id},function(data) {
                 self.Selectedlist = data;

@@ -1,4 +1,4 @@
-<div layout="row" flex >
+<div layout="row" flex style="overflow:auto;">
     <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
         <md-toolbar class="md-primary md-hue-2 md-default-theme md-whiteframe-glow-z2">
             <div class="md-toolbar-tools">
@@ -27,6 +27,7 @@
                         <li ng-repeat="list in value">
                             <a class="md-button md-default-theme" ng-click="vc.selectItem(list)" tabindex="0" >
                                 <span class="ng-binding ng-scope">
+                                    <md-icon ng-show="list.IsShared" style="color:red;width:20px;height:20px;padding-right:2px;" md-svg-icon="share"></md-icon>
                                     {{list.Title}} - <span style="color:#ff4c51">{{ vc.getCheckedCountForItem(list) }} / {{ list.Options.length}}</span>
                                 </span>
                             </a>
@@ -95,7 +96,7 @@
                         <md-checkbox ng-disabled="!vc.IsAllowEdit()" ng-show="!item.isBusy" ng-click="vc.toggle(item)"
                                      ng-checked="item.IsChecked" class="md-primary"  ng-true-value="1" ng-false-value="0"></md-checkbox>
                         <p class="listItem" ng-class="[{'strike':item.IsChecked}]">{{ item.Title }}</p>
-                        <md-icon class="md-secondary" style="color:slategray;" aria-label="Chat" md-svg-icon="comment" ng-click="vc.showComment(item)"></md-icon>
+                        <md-icon class="md-secondary" ng-style="{color:(item.Comments.length > 0 ? 'red':'slategray')}" style="color:slategray;" aria-label="Chat" md-svg-icon="comment" ng-click="vc.showComment(item)"></md-icon>
                         <!--<md-tooltip ng-show="item.IsChecked ">
                             {{item.CheckedDate | date:'dd.MM.yyyy HH:mm:ss'}}
                         </md-tooltip> -->
