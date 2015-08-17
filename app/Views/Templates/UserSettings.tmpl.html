@@ -1,0 +1,49 @@
+<md-dialog class="noselect" aria-label="Mango (Fruit)" style="min-width:40%;">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>
+                Kullanıcı Ayarları
+            </h2>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div layout="column" layout-sm="column" ng-disabled="!vc.IsOwner()">
+            <md-input-container md-no-float flex>
+                <input type="password" ng-model="vc.Password" placeholder="Yeni Şifre">
+            </md-input-container>
+            <md-input-container md-no-float flex>
+                <input  type="password" ng-model="vc.Password2" placeholder="Yeni Şifre Tekrar">
+            </md-input-container>
+            <md-input-container flex>
+                <md-switch aria-label="AllowEdit" ng-model="vc.DisableShare" ng-true-value="1" ng-false-value="0" class="md-primary" >
+                    Paylaşımı Kapat !
+                </md-switch>
+            </md-input-container>
+            <md-input-container flex>
+                <md-switch aria-label="AddOptions" ng-model="vc.OnlyAcceptedShare" ng-true-value="1" ng-false-value="0" class="md-primary"  >
+                    Sadece onayladığım paylaşımları göster
+                </md-switch>
+            </md-input-container>
+            <md-input-container flex>
+                <md-switch aria-label="AddOptions" ng-model="vc.LiveSync" ng-true-value="1" ng-false-value="0" class="md-primary"  >
+                    Live Sync Aktif !
+                </md-switch>
+            </md-input-container>
+            <md-input-container flex md-no-float>
+                <input ng-model="vc.ListFontSize" placeholder="Liste Font Boyutu">
+            </md-input-container>
+            <md-input-container flex md-no-float>
+                <input ng-model="vc.TitleFontSize" placeholder="Başlık Font Boyutu">
+            </md-input-container>
+        </div>
+    </md-dialog-content>
+    <div class="md-actions" layout="row">
+        <span flex></span>
+        <md-button ng-click="vc.save()" class="md-primary">
+            Kaydet
+        </md-button>
+        <md-button ng-click="vc.cancel()" class="md-primary">
+            Vazgeç
+        </md-button>
+    </div>
+</md-dialog>

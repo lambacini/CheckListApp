@@ -49,13 +49,17 @@
                     </div>
                 <span flex></span>
             </div>
+            <md-button class="md-icon-button md-primary docs-menu-icon" aria-label="Toggle Menu" ng-click="vc.openSideBar()">
+                <md-icon style="color:white" md-svg-icon="message" class="ng-isolate-scope md-default-theme" aria-hidden="true">
+                </md-icon>
+            </md-button>
             <md-menu>
                 <md-button aria-label="Open phone interactions menu" class="md-icon-button" ng-click="$mdOpenMenu()">
                     <md-icon md-menu-origin md-svg-icon="settings"></md-icon>
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <md-button >
+                        <md-button ng-click="vc.userSettings()">
                             <md-icon md-svg-icon="settings" md-menu-align-target></md-icon>
                             Ayarlar
                         </md-button>

@@ -21,6 +21,7 @@
         self.IsOwner = IsOwner;
         self.toggle = toggle;
         self.logout = logout;
+        self.userSettings = userSettings;
         self.selectItem = selectItem;
         self.showComment = showComment;
         self.addNew = addNew;
@@ -308,6 +309,20 @@
         function logout() {
             AuthService.logout().then(function(){
                 $state.go('login');
+            });
+        }
+
+        function userSettings(ev) {
+            $mdDialog.show({
+                controller: "UserSettingsCtrl",
+                controllerAs: 'vc',
+                templateUrl: 'views/templates/UserSettings.tmpl.html',
+                parent: angular.element(document.body),
+                clickOutsideToClose:false,
+                escapeToClose:true,
+                targetEvent: ev,
+            }).then(function(data){
+
             });
         }
 
