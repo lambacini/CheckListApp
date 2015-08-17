@@ -4,10 +4,11 @@
  */
 (function(){
     angular.module('app')
-        .controller('AppCtrl',['signalRHubProxy',appCtrl]);
+        .controller('AppCtrl',[appCtrl]);
 
-    function appCtrl(signalRHubProxy){
+    function appCtrl(){
     	var self = this;
+    	self.Test = "Test";
 
     	return self;
     };

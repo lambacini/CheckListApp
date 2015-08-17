@@ -1,0 +1,38 @@
+<div ng-init="vc.init()">
+    <button onclick="notifyMe()">Test</button>
+</div>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    if (Notification.permission !== "granted")
+        Notification.requestPermission();
+});
+
+function notifyMe() {
+    if (!Notification) {
+        alert('Desktop notifications not available in your browser. Try Chromium.');
+        return;
+    }
+
+    if (Notification.permission !== "granted")
+        Notification.requestPermission();
+    else {
+    	var notificationOptison = {
+    		iconUrl:window.location.origin+"/images/logo3_small.png",
+    		title:"Test",
+    		message:"Message"
+    	};
+
+        var notification = new Notification('CheckApp', {
+            icon: window.location.origin+"/images/logo3_small.png",
+            body: "CheckApp Bir bildirim gönderdi !",
+            eventTime:Date.now()+100
+        });
+
+        notification.onclick = function() {
+            window.open("http://stackoverflow.com/a/13328397/1269037");
+        };
+
+    }
+
+}
+</script>

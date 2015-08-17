@@ -59,9 +59,15 @@
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <md-button ng-click="vc.userSettings()">
+                        <md-button ng-click="vc.showUserSettings()">
                             <md-icon md-svg-icon="settings" md-menu-align-target></md-icon>
                             Ayarlar
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="vc.changePassword()">
+                            <md-icon md-svg-icon="lock" md-menu-align-target></md-icon>
+                            Şifre Değiştir
                         </md-button>
                     </md-menu-item>
                     <md-menu-item>

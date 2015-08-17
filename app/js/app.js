@@ -11,8 +11,8 @@
 
     function appParams() {
         return {
-            //WebApi:'http://'+window.location.hostname+':8000/',
-            WebApi:'http://'+window.location.hostname+'/CheckApi/',
+            WebApi:'http://'+window.location.hostname+':8000/',
+            //WebApi:'http://'+window.location.hostname+'/CheckApi/',
             //WebApi:'http://fonetpacs.fonetyazilim.com/CheckApi/',
             clientId: 'ChecklistApp',
             AppName: "ChecklistApp",
@@ -56,6 +56,17 @@
                     }
                 },
                 authentication: true
+            })
+            .state('app.test', {
+                url: '/test',
+                views: {
+                    'mainContent': {
+                        templateUrl: 'views/checklist/test.html',
+                        controller: 'TestCtrl',
+                        controllerAs: 'vc'
+                    }
+                },
+                authentication: false
             })
 
     };
@@ -115,6 +126,7 @@
             .icon('comment','images/ic_message_24px.svg')
             .icon('logout','images/ic_exit_to_app_24px.svg')
             .icon('share','images/ic_share_24px.svg')
+            .icon('lock','images/ic_lock_outline_24px.svg')
     };
 
     function appRun($state,$rootScope,AuthService){

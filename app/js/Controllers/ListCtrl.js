@@ -3,10 +3,13 @@
  */
 (function() {
     angular.module('app')
-        .controller('ListCtrl', ['$scope','store','$q','$mdDialog', '$mdSidenav', '$filter', 'CheckLists', 'notify', '$timeout','menu','AuthService','$state','hotkeys','appParams','signalRHubProxy', listCtrl]);
+        .controller('ListCtrl', ['$scope', 'store', '$q', '$mdDialog', '$mdSidenav', '$filter', 'CheckLists', 'notify', '$timeout',
+            'menu', 'AuthService', '$state', 'hotkeys', 'appParams', 'signalRHubProxy', 'UserSettings', listCtrl
+        ]);
 
 
-    function listCtrl($scope,store,$q,$mdDialog, $mdSidenav, $filter, CheckLists, notify, $timeout,menu,AuthService,$state,hotkeys,appParams,signalRHubProxy) {
+    function listCtrl($scope, store, $q, $mdDialog, $mdSidenav, $filter, CheckLists, notify, $timeout,
+        menu, AuthService, $state, hotkeys, appParams, signalRHubProxy, UserSettings) {
         var self = this;
         self.menu = menu;
         self.loadCheckList = loadCheckList;
@@ -16,12 +19,13 @@
             }
         });
         self.Selectedlist = {};
-        self.IsAllowEdit =IsAllowEdit;
-        self.IsAllowAddOptions =IsAllowAddOptions;
+        self.IsAllowEdit = IsAllowEdit;
+        self.IsAllowAddOptions = IsAllowAddOptions;
         self.IsOwner = IsOwner;
         self.toggle = toggle;
         self.logout = logout;
-        self.userSettings = userSettings;
+        self.showUserSettings = showUserSettings;
+        self.changePassword = changePassword;
         self.selectItem = selectItem;
         self.showComment = showComment;
         self.addNew = addNew;
@@ -39,10 +43,11 @@
         self.getCheckedCountForItem = getCheckedCountForItem;
         self.OnlyChecked = true;
         self.test = test;
-        self.sections = [
-            { Name:"Listelerim" },
-            {Name:"Paylaşılanlar"}
-        ]
+        self.sections = [{
+            Name: "Listelerim"
+        }, {
+            Name: "Paylaşılanlar"
+        }]
 
         /*
         var authData = store.get('token');
@@ -69,7 +74,7 @@
         });
 
         */
-        
+
         hotkeys.add({
             combo: 'f7',
             callback: function() {
@@ -95,29 +100,23 @@
         function toggle(item) {
             var defer = $q.defer();
 
-            if(!self.IsAllowEdit())
-            {
+            if (!self.IsAllowEdit()) {
                 defer.reject();
-            }
-            else if(item.IsChecked == 0)
-            {
+            } else if (item.IsChecked == 0) {
                 item.IsChecked = 1;
                 defer.resolve(true);
-            }
-            else
-            {
+            } else {
                 notify.confirm('İptal', 'Seçim iptal edilecek eminmisiniz ?').then(function(isConfirm) {
                     if (isConfirm) {
                         item.IsChecked = 0;
                         defer.resolve(true);
-                    }
-                    else{
+                    } else {
                         defer.reject();
                     }
                 });
             }
 
-            defer.promise.then(function(){
+            defer.promise.then(function() {
                 self.Selectedlist.Options.forEach(function(listItem, key) {
                     if (item.Id == listItem.Id) {
                         if (item.IsChecked) {
@@ -145,9 +144,11 @@
 
         function selectItem(item) {
             $mdSidenav('left').close();
-            
+
             notify.showLoading();
-            CheckLists.get({id:item.Id},function(data) {
+            CheckLists.get({
+                id: item.Id
+            }, function(data) {
                 self.Selectedlist = data;
                 notify.hideLoading();
             });
@@ -164,10 +165,10 @@
                 },
                 templateUrl: 'views/templates/comments.tmpl.html',
                 parent: angular.element(document.body),
-                clickOutsideToClose:false,
-                escapeToClose:true,
+                clickOutsideToClose: false,
+                escapeToClose: true,
                 targetEvent: ev,
-            }).then(function(data){
+            }).then(function(data) {
                 notify.showLoading();
                 CheckLists.update({
                     id: self.Selectedlist.Id
@@ -190,8 +191,8 @@
                 },
                 templateUrl: 'views/templates/AddOptions.tmpl.html',
                 parent: angular.element(document.body),
-                clickOutsideToClose:false,
-                escapeToClose:false,
+                clickOutsideToClose: false,
+                escapeToClose: false,
                 targetEvent: ev,
             }).then(function(test) {
                 notify.showLoading();
@@ -216,8 +217,8 @@
                 },
                 templateUrl: 'views/templates/EditList.tmpl.html',
                 parent: angular.element(document.body),
-                clickOutsideToClose:false,
-                escapeToClose:true,
+                clickOutsideToClose: false,
+                escapeToClose: true,
                 targetEvent: ev,
             }).then(function() {
                 self.loadCheckList();
@@ -237,8 +238,8 @@
                 },
                 templateUrl: 'views/templates/EditList.tmpl.html',
                 parent: angular.element(document.body),
-                clickOutsideToClose:false,
-                escapeToClose:true,
+                clickOutsideToClose: false,
+                escapeToClose: true,
                 targetEvent: ev,
             }).then(function() {
                 self.loadCheckList();
@@ -307,26 +308,52 @@
         }
 
         function logout() {
-            AuthService.logout().then(function(){
+            AuthService.logout().then(function() {
                 $state.go('login');
             });
         }
 
-        function userSettings(ev) {
-            $mdDialog.show({
-                controller: "UserSettingsCtrl",
-                controllerAs: 'vc',
-                templateUrl: 'views/templates/UserSettings.tmpl.html',
-                parent: angular.element(document.body),
-                clickOutsideToClose:false,
-                escapeToClose:true,
-                targetEvent: ev,
-            }).then(function(data){
+        function showUserSettings(ev) {
+            notify.showLoading();
 
+            UserSettings.get({
+                id: appParams.UserInfo.userId
+            }, function(data) {
+                notify.hideLoading();
+
+                $mdDialog.show({
+                    controller: "UserSettingsCtrl",
+                    controllerAs: 'vc',
+                    resolve:{
+                        setting:function(){
+                            return data;
+                        }
+                    },
+                    templateUrl: 'views/templates/UserSettings.tmpl.html',
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: false,
+                    escapeToClose: true,
+                    targetEvent: ev,
+                }).then(function(data) {
+
+                });
             });
         }
 
-        function shareList(ev){
+        function changePassword(ev){
+             $mdDialog.show({
+                    controller: "PasswordCtrl",
+                    controllerAs: 'vc',
+                    templateUrl: 'views/templates/ChangePassword.tmpl.html',
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: false,
+                    escapeToClose: true,
+                    targetEvent: ev,
+                }).then(function(data) {
+
+                });
+        }
+        function shareList(ev) {
             $mdDialog.show({
                 controller: "ShareCtrl",
                 controllerAs: 'vc',
@@ -337,57 +364,46 @@
                 },
                 templateUrl: 'views/templates/ShareList.tmpl.html',
                 parent: angular.element(document.body),
-                clickOutsideToClose:false,
-                escapeToClose:true,
+                clickOutsideToClose: false,
+                escapeToClose: true,
                 targetEvent: ev,
-            }).then(function(data){
+            }).then(function(data) {
 
             });
         }
 
-        function test(){
+        function test() {
             console.log("Test");
         }
 
-        function IsAllowEdit(){
-            if(self.Selectedlist.UserId == appParams.UserInfo.userId)
-            {
+        function IsAllowEdit() {
+            if (self.Selectedlist.UserId == appParams.UserInfo.userId) {
                 return true;
-            }
-            else{
-                if(self.Selectedlist.UserCanBeEdit == 1)
-                {
+            } else {
+                if (self.Selectedlist.UserCanBeEdit == 1) {
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
             }
         }
 
-        function IsAllowAddOptions(){
-            if(self.Selectedlist.UserId == appParams.UserInfo.userId)
-            {
+        function IsAllowAddOptions() {
+            if (self.Selectedlist.UserId == appParams.UserInfo.userId) {
                 return true;
-            }
-            else{
-                if(self.Selectedlist.UserCanBeAdd == 1)
-                {
+            } else {
+                if (self.Selectedlist.UserCanBeAdd == 1) {
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
             }
         }
 
-        function IsOwner(){
-            if(self.Selectedlist.UserId == appParams.UserInfo.userId)
-            {
+        function IsOwner() {
+            if (self.Selectedlist.UserId == appParams.UserInfo.userId) {
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
