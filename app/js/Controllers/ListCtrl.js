@@ -18,6 +18,7 @@
                 self.Selectedlist = self.Items[self.Items.length - 1];
             }
         });
+        self.listIndex = 2;
         self.Selectedlist = {};
         self.IsAllowEdit = IsAllowEdit;
         self.IsAllowAddOptions = IsAllowAddOptions;
@@ -36,7 +37,6 @@
         self.shareList = shareList;
         self.OnlyChecked = false;
         self.ListType = "Tümü";
-        self.ChangeList = ChangeList;
         self.TempItem = self.Items[0];
         self.isVisible = isVisible;
         self.getCheckedCount = getCheckedCount;
@@ -256,23 +256,28 @@
             $mdSidenav('left').open();
         }
 
-        function ChangeList() {
-            if (self.OnlyChecked) {
-                self.ListType = "Bekleyenler";
-
-            } else {
-                self.ListType = "Tümü";
-
-            }
-        }
-
         function isVisible(item) {
-            if (self.OnlyChecked && item.IsChecked)
+            if(self.listIndex == 0)
+            {
+                return true;
+            }
+            else if(self.listIndex == 1 && item.IsChecked)
+            {
+                return true;
+            }
+            else if(self.listIndex == 1 && !item.IsChecked)
+            {
                 return false;
-            else if (!self.OnlyChecked) {
+            }
+            else if(self.listIndex == 2 && !item.IsChecked)
+            {
                 return true;
-            } else
-                return true;
+            }
+            else if(self.listIndex == 2 && item.IsChecked)
+            {
+                return false;
+            }
+
         }
 
         function getCheckedCount() {

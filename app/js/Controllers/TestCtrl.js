@@ -14,7 +14,7 @@
     	return self;
 
     	function init(){
-    		console.log(window.location);
+    		console.log(window.location.origin);
     		console.log("init !");
     	}
     };

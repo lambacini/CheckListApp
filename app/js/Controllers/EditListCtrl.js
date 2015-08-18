@@ -147,6 +147,9 @@
                 if (confirm) {
                     $mdDialog.hide(true);
                 }
+                else{
+                    notify.toast("Sanırım bazı alanları boş bıraktın !");
+                }
             });
         }
 

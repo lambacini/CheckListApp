@@ -8,7 +8,7 @@
     <md-dialog-content >
         <div layout="column" layout-sm="column" ng-disabled="!vc.IsOwner()">
             <md-input-container md-no-float flex>
-                <input ng-model="vc.NewItem.Title" placeholder="Başlık"  ng-disabled="!vc.IsOwner()">
+                <input ng-model="vc.NewItem.Title" focus-me="true" placeholder="Başlık"  ng-disabled="!vc.IsOwner()">
             </md-input-container>
             <md-input-container md-no-float flex>
                 <input ng-model="vc.NewItem.Group" placeholder="Grup (Büyük Küçük Harf Duyarlı)"  ng-disabled="!vc.IsOwner()">

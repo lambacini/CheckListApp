@@ -28,7 +28,8 @@
                         badgeClass:"info",
                        badgeIconClass:"glyphicon-check",
                        title:comment.User,
-                       content:comment.Comment
+                       content:comment.Comment,
+                       time:comment.CTime
                    });
                 }) ;
             }
@@ -60,7 +61,8 @@
                        Comment:inputValue,
                        User:appParams.UserInfo.name+" "+appParams.UserInfo.surname,
                        UserId:appParams.UserInfo.userId,
-                       OptionId:self.Item.Id
+                       OptionId:self.Item.Id,
+                       CTime:Date.now()
                    });
 
                     self.init();

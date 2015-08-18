@@ -11,16 +11,16 @@
         </div>
     </md-toolbar>
     <md-dialog-content>
-        <md-list>
-            <md-list-item ng-repeat="item in vc.Item.Options">
-                <div layout layout="column" flex>
-                    <md-input-container md-no-float flex>
-                        <input required  ng-readonly="item.IsChecked" ng-model="item.Title" placeholder="Başlık">
-                    </md-input-container>
-                </div>
-                <md-icon ng-show="!item.IsChecked" class="md-secondary" style="color:red;"  aria-label="Chat" md-svg-icon="delete" ng-click="vc.remove(item)"></md-icon>
-            </md-list-item>
-        </md-list>
+            <md-list >
+                <md-list-item ng-repeat="item in vc.Item.Options">
+                    <div  layout layout="column" flex>
+                        <md-input-container md-no-float flex>
+                            <input required focus-me="true" ng-readonly="item.IsChecked" ng-model="item.Title" placeholder="Başlık">
+                        </md-input-container>
+                    </div>
+                    <md-icon ng-show="!item.IsChecked" class="md-secondary" style="color:red;"  aria-label="Chat" md-svg-icon="delete" ng-click="vc.remove(item)"></md-icon>
+                </md-list-item>
+            </md-list>
     </md-dialog-content>
     <div class="md-actions" layout="row">
         <span flex></span>

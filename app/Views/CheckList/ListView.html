@@ -92,12 +92,12 @@
                     <div flex>
 
                     </div>
-                    <div flex-sm="100" flex-lg="10" flex-md="100">
-                        <md-switch ng-model="vc.OnlyChecked" aria-label="Switch 1" ng-change="vc.ChangeList()">
-                        </md-switch>
-                        <md-tooltip>
-                          {{ vc.ListType}}
-                        </md-tooltip>
+                    <div >
+                        <div layout="row" >
+                            <md-button ng-click="vc.listIndex = 0" class="md-primary md-hue-1 listButton listButtonLeft" ng-class="[{'md-raised listSelected':vc.listIndex == 0}]">Tümü</md-button>
+                            <md-button ng-click="vc.listIndex = 1" class="md-primary md-hue-1 listButton listButtonMiddle" ng-class="[{'md-raised listSelected':vc.listIndex == 1}]">Tamamlananlar </md-button>
+                            <md-button ng-click="vc.listIndex = 2" class="md-primary md-hue-1 listButton listButtonRight" ng-class="[{'md-raised listSelected':vc.listIndex == 2}]">Bekleyenler</md-button> 
+                        </div>
                     </div>
                 </div>
                 <md-list>

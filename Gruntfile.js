@@ -22,6 +22,10 @@ module.exports = function(grunt) {
                 src: './app/js/Controllers/*.js',
                 dest: './dist/js/controllers.js'
             },
+            directiveJs:{
+                src: './app/js/Directives/*.js',
+                dest: './dist/js/Directives.js'
+            },
             serviceJs:{
                 src: './app/js/Services/*.js',
                 dest: './dist/js/Services.js'
