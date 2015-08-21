@@ -42,7 +42,7 @@
         self.getCheckedCount = getCheckedCount;
         self.getCheckedCountForItem = getCheckedCountForItem;
         self.OnlyChecked = true;
-        self.test = test;
+        self.about = about;
         self.sections = [{
             Name: "Listelerim"
         }, {
@@ -358,6 +358,7 @@
 
                 });
         }
+        
         function shareList(ev) {
             $mdDialog.show({
                 controller: "ShareCtrl",
@@ -411,6 +412,18 @@
             } else {
                 return false;
             }
+        }
+
+        function about(ev){
+            $mdDialog.show({
+                    templateUrl: 'views/templates/about.tmpl.html',
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: true,
+                    escapeToClose: true,
+                    targetEvent: ev,
+                }).then(function(data) {
+
+                });
         }
     };
 })();

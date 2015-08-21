@@ -1,9 +1,9 @@
 {
-  "name": "angular-seed",
+  "name": "CheckApp",
   "private": true,
   "version": "0.0.0",
-  "description": "A starter project for AngularJS",
-  "repository": "https://github.com/angular/angular-seed",
+  "description": "Open Source Check List App",
+  "repository": "https://github.com/lambacini/CheckListApp",
   "license": "MIT",
   "dependencies": {
     "connect-livereload": "^0.5.3",

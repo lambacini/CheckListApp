@@ -57,6 +57,15 @@
                 },
                 authentication: true
             })
+            .state('app.outofservice', {
+                url: '/outofservice',
+                views: {
+                    'mainContent': {
+                        templateUrl: 'views/checklist/OutOfService.html'
+                    }
+                },
+                authentication: false
+            })
             .state('app.test', {
                 url: '/test',
                 views: {

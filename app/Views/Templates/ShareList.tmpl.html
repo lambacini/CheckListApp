@@ -1,52 +1,36 @@
-<md-dialog class="noselect" aria-label="Mango (Fruit)" style="min-width:40%;">
-    <md-dialog-content>
-        <md-tabs md-dynamic-height md-border-bottom>
-            <md-tab label="Kullanıcı İle Paylaş">
-                <md-content class="md-padding">
-                    <div layout="column" layout-sm="column">
-                        <md-input-container md-no-float flex>
-                            <md-select placeholder="Kullanıcı Seçiniz" ng-model="vc.selectedUser">
-                                <md-option ng-repeat="user in vc.users" value="{{user.Id}}">{{user.UserName}}</md-option>
-                            </md-select>
-                        </md-input-container>
-                        <md-input-container flex>
-                            <md-switch aria-label="Accept All Device" ng-model="vc.NewItem.UserCanBeEdit" ng-true-value="1" ng-false-value="0" class="md-primary">
-                                Kullanıcıyı E-Mail ile bilgilendir.
-                            </md-switch>
-                        </md-input-container>
-                        <md-input-container flex>
-                            <md-switch  aria-label="Accept All Device" ng-model="vc.NewItem.InOrder" ng-true-value="1" ng-false-value="0" class="md-primary">
-                                Değişiklikleri bana bildir (E-Mail)
-                            </md-switch>
-                        </md-input-container>
-                    </div>
-                </md-content>
-            </md-tab>
-            <md-tab label="E-Mail İle Paylaş" ng-disabled="true">
-                <md-content class="md-padding">
-                    <div layout="column" layout-sm="column">
-                        <md-input-container md-no-float flex>
-                            <input type="email" ng-model="vc.MailAddress" placeholder="E-Mail Adres">
-                        </md-input-container>
-                    </div>
-                </md-content>
-            </md-tab>
-            <md-tab label="Direct Link Paylaş" ng-disabled="true">
-                <md-content class="md-padding">
-                    <div layout="row" layout-sm="column">
-                        <md-input-container md-no-float flex>
-                            <input ng-model="vc.Link" placeholder="Link">
-                        </md-input-container>
-                        <md-button class="md-primary">Oluştur</md-button>
-                    </div>
-                </md-content>
-            </md-tab>
-        </md-tabs>
+<md-dialog class="noselect" aria-label="Share" style="min-width:40%;">
+    <md-dialog-content flex>
+        <div layout="row" flex>
+             <md-list flex>
+                <md-subheader class="md-no-sticky">Paylaş</md-subheader>
+                <md-list-item ng-click="alert('asdf')">
+                    <p>Test 1</p>
+                </md-list-item>
+                <md-list-item ng-click="alert('asdf')">
+                    <p>Test 1</p>
+                </md-list-item>
+                <md-list-item ng-click="alert('asdf')">
+                    <p>Test 1</p>
+                </md-list-item>
+            </md-list>
+            <md-list flex>
+                <md-subheader class="md-no-sticky">Paylaşılanlar</md-subheader>
+                <md-list-item ng-click="alert('asdf')">
+                    <p>Test 1</p>
+                </md-list-item>
+                <md-list-item ng-click="alert('asdf')">
+                    <p>Test 1</p>
+                </md-list-item>
+                <md-list-item ng-click="alert('asdf')">
+                    <p>Test 1</p>
+                </md-list-item>
+            </md-list>
+        </div>
     </md-dialog-content>
     <div class="md-actions" layout="row">
         <span flex></span>
         <md-button ng-click="vc.save()" class="md-primary">
-            Paylaş
+            Tamam
         </md-button>
         <md-button ng-click="vc.cancel()" class="md-primary">
             Vazgeç
